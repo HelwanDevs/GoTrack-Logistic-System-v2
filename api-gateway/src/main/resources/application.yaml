@@ -32,13 +32,6 @@ spring:
               - Path=/api/inventory/**
             filters:
               - AddRequestHeader=X-Gateway, Dynamic
-          - id: ml-service-ping
-            uri: ${ML_SERVICE_URL}
-            predicates:
-              - Path=/api/ml/ping
-            filters:
-              - RewritePath=/api/ml/ping, /ping
-
           - id: ml-service-predict
             uri: ${ML_SERVICE_URL}
             predicates:
