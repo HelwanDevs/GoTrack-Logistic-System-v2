@@ -20,11 +20,14 @@ import {
   type ListAccountsParams,
 } from "@/features/accounts";
 import { UserRole } from "@/types/enums";
+import { SearchableSelect } from "@/components/SearchableSelect";
+import { useSearchProfilesQuery } from "@/features/profiles";
 
 interface FormData {
   email: string;
   password: string;
   role: UserRole | "";
+  profileId: number | null
 }
 
 interface EditingAccount {
@@ -69,11 +72,19 @@ export const AccountsPage = () => {
   const accounts = accountsData?.accounts || [];
   const totalCount = accountsData?.totalCount || 0;
   const totalPages = accountsData?.totalPages || 0;
+  const [profileSearchQuery, setProfileSearchQuery] = useState("");
 
   const createMutation = useCreateAccountMutation();
   const updateMutation = useUpdateAccountMutation();
   const deleteMutation = useDeleteAccountMutation();
   const changePasswordMutation = useChangePasswordMutation();
+  const [profilePage, setProfilePage] = useState(0);
+  const accountQuery = {
+    page: profilePage,
+    size: 10,
+    name: profileSearchQuery || "",
+  };
+  const { data: profilesData , refetch: profilesRefetch } = useSearchProfilesQuery({ ...accountQuery });
 
   // Change Password Modal State
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
@@ -91,6 +102,7 @@ export const AccountsPage = () => {
     email: "",
     password: "",
     role: "",
+    profileId : null
   });
 
   const [editForm, setEditForm] = useState<EditingAccount>({
@@ -128,6 +140,10 @@ export const AccountsPage = () => {
       errors.role = "الدور مطلوب";
     }
 
+    if (!createForm.profileId) {
+      errors.profileId = "معرف الملف الشخصي مطلوب";
+    }
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -162,7 +178,7 @@ export const AccountsPage = () => {
 
     try {
       await createMutation.mutateAsync(createForm as CreateAccountRequest);
-      setCreateForm({ email: "", password: "", role: "" });
+      setCreateForm({ email: "", password: "", role: ""  , profileId : null});
       setShowCreateForm(false);
       setFormErrors({});
     } catch (error: any) {
@@ -343,8 +359,11 @@ export const AccountsPage = () => {
             size="sm"
             onClick={() => {
               setShowCreateForm(!showCreateForm);
+              if(showCreateForm) {
+                profilesRefetch()
+              }
               setEditingId(null);
-              setCreateForm({ email: "", password: "", role: "" });
+              setCreateForm({ email: "", password: "", role: "" , profileId : null});
               setFormErrors({});
             }}
           >
@@ -414,6 +433,32 @@ export const AccountsPage = () => {
               required
             />
 
+
+            <SearchableSelect 
+              label="الملف الشخصي"
+              options={profilesData?.content.filter(e => e.accountId == null).map(profile => ({
+                value: profile.id.toString(),
+                label: profile.fullName
+              })) || []}
+              searchQuery={profileSearchQuery}
+              setSearchQuery={(value) => {
+                setProfileSearchQuery(value)
+                setProfilePage(0)
+              }}
+              onSelect={(option) => {
+                setCreateForm({
+                  ...createForm,
+                  profileId: parseInt(option.value),
+                });
+              }}
+              onClear={() => {
+                setCreateForm({
+                  ...createForm,
+                  profileId: null
+                })
+              }}
+              hasClear
+            />
             {formErrors.submit && (
               <div className="p-3 bg-error/10 border border-error rounded-lg">
                 <p className="text-error text-body-sm">{formErrors.submit}</p>
@@ -436,7 +481,7 @@ export const AccountsPage = () => {
                 size="md"
                 onClick={() => {
                   setShowCreateForm(false);
-                  setCreateForm({ email: "", password: "", role: "" });
+                  setCreateForm({ email: "", password: "", role: "" , profileId: null});
                   setFormErrors({});
                 }}
               >

@@ -100,10 +100,10 @@ export const InventoryItemsPage = () => {
       name: b.name,
     })) || [];
 
-  const pickups: { id: number; merchantProfileId: number }[] =
+  const pickups: { id: number; MERCHANTId: number }[] =
     pickupsData?.content?.map((p: PickupRequestDTO) => ({
       id: p.id || 0,
-      merchantProfileId: p.merchantProfileId || 0,
+      MERCHANTId: p.MERCHANTId || 0,
     })) || [];
 
   // ── Derived Data ──

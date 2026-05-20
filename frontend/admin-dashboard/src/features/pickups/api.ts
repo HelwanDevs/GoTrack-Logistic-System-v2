@@ -53,8 +53,8 @@ export const searchPickupsApi = async (
   const queryParams = new URLSearchParams();
 
   if (params.status) queryParams.append("status", params.status);
-  if (params.merchantProfileId !== undefined)
-    queryParams.append("merchantProfileId", String(params.merchantProfileId));
+  if (params.MERCHANTId !== undefined)
+    queryParams.append("MERCHANTId", String(params.MERCHANTId));
   if (params.courierProfileId !== undefined)
     queryParams.append("courierProfileId", String(params.courierProfileId));
   if (params.branchId !== undefined)

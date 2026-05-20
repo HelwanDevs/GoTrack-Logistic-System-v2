@@ -90,12 +90,12 @@ public class PickupService {
                 ProfileResponse profile = profileBranchService.getProfileByAccountId(accountId);
 
                 if (filter.getMERCHANTId() != null && filter.getMERCHANTId() != profile.getId()
-                                && profile.getType().toString() != "MERCHANT") {
+                                && profile.getType().toString() == "MERCHANT") {
                         throw new ConflictException("You are not authorized to search pickups for this merchant");
                 }
 
-                if (profile.getType().toString() == "MERCHANT")
-                        filter.setMERCHANTId(profile.getId());
+                // if (profile.getType().toString() == "MERCHANT")
+                //         filter.setMERCHANTId(profile.getId());
 
                 Specification<Pickup> spec = PickupSpecification.filterPickups(filter);
                 return pickupRepository.findAll(spec, pageable)

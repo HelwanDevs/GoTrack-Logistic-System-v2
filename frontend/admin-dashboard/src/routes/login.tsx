@@ -6,9 +6,9 @@ import { Suspense } from "react";
 
 export const Route = createFileRoute("/login")({
   beforeLoad: async () => {
-    // if (checkIsAuthenticated() && checkIsEmployee()) {
-    //   throw redirect({ to: "/dashboard" });
-    // }
+    if (checkIsAuthenticated() && checkIsEmployee()) {
+      throw redirect({ to: "/dashboard" });
+    }
   },
   component: () => (
     <Suspense fallback={<LoadingSpinner />}>

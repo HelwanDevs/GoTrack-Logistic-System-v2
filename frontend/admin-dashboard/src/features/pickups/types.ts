@@ -7,7 +7,7 @@ export enum PickupStatus {
 
 export interface PickupRequestDTO {
   id?: number;
-  merchantProfileId: number;
+  MERCHANTId: number;
   branchId: number;
   status?: PickupStatus;
   courierProfileId?: number;
@@ -17,7 +17,7 @@ export interface PickupRequestDTO {
 
 export interface PickupFilter {
   status?: PickupStatus;
-  merchantProfileId?: number;
+  MERCHANTId?: number;
   courierProfileId?: number;
   branchId?: number;
   page?: number;

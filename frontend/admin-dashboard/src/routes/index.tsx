@@ -3,10 +3,10 @@ import { checkIsEmployee, checkIsAuthenticated } from "@/features/auth";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
-    // if (checkIsAuthenticated() && checkIsEmployee()) {
-    //   throw redirect({ to: "/dashboard" });
-    // } else {
-    //   throw redirect({ to: "/login" });
-    // }
+    if (checkIsAuthenticated() && checkIsEmployee()) {
+      throw redirect({ to: "/dashboard" });
+    } else {
+      throw redirect({ to: "/login" });
+    }
   },
 });

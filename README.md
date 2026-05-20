@@ -13,6 +13,124 @@ GoTrack is a **logistics and supply chain management platform** built as a Sprin
 ## [Project Documentation](https://github.com/HelwanDevs/GoTrack-Logistic-System/tree/documentation)
 
 
+### You can find The NLP PROJECT HERE 👇
+## [Project GITHUB LINK](https://github.com/SalmaEzz10/CloudNLPUpdated)
+## [MODEL LINK](https://drive.usercontent.google.com/download?id=1QwH7bmoV00iorTlry9lnKu6XTSYOcuiR&export=download&authuser=0&confirm=t&uuid=d61ca77b-c153-4653-ac0d-f80a7a6cfcc4&at=ALBwUgngWOUdvcAFxtPr8QpZk5fi:1778936505643)
+
+> put the model in `arabertNER_Model` folder 
+
+## [NOTEBOOK LINK](https://colab.research.google.com/drive/1Q3KnafOA-WfzxKnqhKgbt462NxT8LVyS?usp=sharing)
+
+## How to Run
+
+### Prerequisites
+
+- **Docker** & **Docker Compose** installed
+- **Java 21** (if running services locally without Docker)
+- **Node.js 18+** & **npm** (for frontend development)
+- **Maven** (if building services locally)
+
+### Option 1: Using Docker Compose (Recommended)
+
+> Important! you have to make sure there is a copy of the RSA keys folder into each service
+
+> we used SSM AWS Services to handel the RSA keys in production
+
+
+1. **Start all services:**
+   ```bash
+   docker-compose up -d
+   ```
+
+   This will start:
+   - MongoDB (port 27017)
+   - MySQL (port 3306)
+   - PostgreSQL (port 5432)
+   - Service Discovery (port 8761)
+   - API Gateway (port 8080)
+   - Auth Service
+   - User-Branch Service 
+   - Inventory Service 
+   - Core Logistic Finance
+2. **View logs:**
+   ```bash
+   docker-compose logs -f
+   ```
+
+3. **Stop all services:**
+   ```bash
+   docker-compose down
+   ```
+4. **Running Admin Dashboard:**
+
+> **Note:** This frontend is only a proof of concept (PoC) for frontend integration with the microservices application and API Gateway.
+
+You can run the frontend to test the integration and API requests with the following services:
+
+- Auth Service
+- User Branch Service
+- Core Logistic Service
+
+> For better testing, we recommend testing the APIs directly using the Postman collection located in:
+
+```bash
+/postman/SE-2-API-Collection
+```
+
+### Running the Frontend
+
+#### Admin Dashboard
+```bash
+cd frontend/admin-dashboard
+npm install
+npm run dev
+```
+Access at: `http://localhost:5173`
+
+`Frontend is integrated by default with localhost:8080 `
+
+### Super Admin Account
+```
+{
+  _id: ObjectId('69ea6de547f8518fb6b09b7b'),
+  email: 'admin_admin@admin.com',
+  password: '$2a$10$tPlJ6EiUvmZtNnYebrtfJOiMsTzfkZUO8tIvUk2s6UWFN8eLNvZVG',
+  role: 'ADMIN',
+  superAdmin: true,
+  updatedAt: ISODate('2026-04-27T05:52:24.471Z'),
+  deleted: false,
+  _class: 'com.gotrack.auth_service.entity.Account'
+}
+```
+Add This account manualy in mongoDB in "auth-database" > "accounts"
+
+
+> Email : admin_admin@admin.com , Password : 1234567
+
+### Service Access URLs
+
+| Service | URL |
+|---------|-----|
+| **API Gateway** | http://localhost:8080 |
+| **Service Discovery (Eureka)** | http://localhost:8761 |
+| **Admin Dashboard** | http://localhost:5173 |
+
+### Testing APIs
+
+Import the Postman collection to test all endpoints:
+```bash
+# Import this file into Postman
+postman/SE-2-API-Collection.json
+```
+
+### Troubleshooting
+
+- **Services not registering with Eureka:** Ensure Service Discovery is running first
+- **Database connection errors:** Verify database containers are running with `docker-compose ps`
+- **Port conflicts:** Check if ports 8080-8083, 8761, 9091, 5173-5174 are available
+- **JWT validation errors:** Ensure RSA keys are properly configured in `keys/` directory
+
+
 ## Directory Layout
 
 ```
@@ -25,12 +143,13 @@ SE-2/
 ├── user-branch-service/           # Branches & profiles (users: employees, couriers, customers) (PostgreSQL)
 ├── support_and_notifications_service/  # Complaints & notifications (MongoDB)
 ├── frontend/
-│   ├── admin-dashboard/           # React + TanStack Router + Zustand + Tailwind v4
-│   └── merchant-dashboard/        # React + TanStack Router + Zustand + Tailwind v4
+│   ├── admin-dashboard/           # React + TanStack Router + Tailwind v4
+│   └── merchant-dashboard/        # React + TanStack Router + Tailwind v4
 ├── postman/                       # API test collection
 ├── docker-compose.yml             # Orchestrates MongoDB + services
 └── logs/                          # Runtime logs
 ```
+
 
 ## Architecture Diagram
 
@@ -76,16 +195,16 @@ SE-2/
 |---------|------|----|-----------|------|----------|
 | **api-gateway** | 8080 | — | Spring Cloud Gateway | N/A | Request routing, load balancing |
 | **auth-service** | 8081 | MongoDB | Spring Boot 4.0.5, JJWT | BCrypt + JWT (HMAC/RSA) + AOP logging | Account management, login/logout, role-based auth |
-| **inventory-service** | 8083 | MySQL | Spring Boot 4.0.6, JPA, MapStruct, JJWT, Feign | JWT validation + Role header | Products & inventory items |
-| **core-logistic-finance** | 9091 | MySQL | Spring Boot 4.0.5, JPA, MapStruct | None (gateway auth) | Shipments, pickups, transactions, wallets |
-| **user-branch-service** | 8082 | PostgreSQL | Spring Boot 4.0.5, JPA, ModelMapper | JJWT + Feign + auth0 jwt | Branches, profiles (employees, couriers, customers) |
+| **core-logistic-finance** | 8082 | MySQL | Spring Boot 4.0.5, JPA, MapStruct | None (gateway auth) | Shipments, pickups, transactions, wallets |
+| **user-branch-service** | 8083 | PostgreSQL | Spring Boot 4.0.5, JPA, ModelMapper | JJWT + Feign + auth0 jwt | Branches, profiles (employees, couriers, customers) |
+| **inventory-service** | 8084 | MySQL | Spring Boot 4.0.6, JPA, MapStruct, JJWT, Feign | JWT validation + Role header | Products & inventory items |
 | **support_and_notifications** | — | MongoDB | Spring Boot 4.0.5, JJWT, AOP | JJWT + @PreAuthorize | Complaints lifecycle + multi-channel notifications |
 | **service-discovery** | 8761 | — | Spring Boot, Eureka Server | N/A | Service registry |
 
 ## Tech Stack
 
 - **Backend:** Java 21, Spring Boot 4.0.5/4.0.6, Spring Cloud 2025.1.1
-- **Frontend:** React 19, TypeScript, Vite, Tailwind CSS v4, TanStack Router, TanStack React Query, Zustand
+- **Frontend:** React 19, TypeScript, Vite, Tailwind CSS v4, TanStack Router, TanStack React Query
 - **Databases:** MongoDB (auth, notifications), MySQL (inventory, finance), PostgreSQL (branches/profiles)
 - **Infrastructure:** Docker Compose, Eureka (service discovery), Spring Cloud Gateway
 - **Security:** Spring Security, JWT (jjwt 0.11.5), BCrypt, RSA fallback, method security (@PreAuthorize)

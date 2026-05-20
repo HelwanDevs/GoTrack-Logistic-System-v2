@@ -1,105 +1,214 @@
+version: '3.8'
+
 services:
-  # MongoDB Database
+  # ==========================================
+  # 1. Databases (Start First)
+  # ==========================================
   mongodb:
     image: mongo:latest
-    container_name: gotrack-mongodb
+    container_name: mongodb
+    ports:
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: secret
-      MONGO_INITDB_DATABASE: auth_db
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongodb_data:/data/db
-      - mongodb_config:/data/configdb
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - gotrack-network
-    # healthcheck:
-    #   test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
-    #   start_period: 20s
 
-  # Service Discovery (Eureka)
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: gotrackdb
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gotrack-network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: rootpassword
+      POSTGRES_DB: userbranchdb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d userbranchdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gotrack-network
+
+  # ==========================================
+  # 2. Service Discovery (Waits for DBs)
+  # ==========================================
   service-discovery:
-    build:
+    build: 
       context: ./service-discovery
-      dockerfile: Dockerfile
+      network: host  # <--- Added to bypass DNS issues during Maven build
     container_name: service-discovery
+    
     ports:
-      - '8761:8761'
+      - "8761:8761"
     environment:
-      - SPRING_APPLICATION_NAME=service-discovery
       - SERVER_PORT=8761
+      - SPRING_PROFILES_ACTIVE=prod
+      - HOST_IP=service-discovery
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     networks:
       - gotrack-network
-    depends_on:
-      - mongodb
-    # healthcheck:
-    #   test: curl -f http://localhost:8761/eureka/apps || exit 1
-    #   interval: 15s
-    #   timeout: 10s
-    #   retries: 5
-    #   start_period: 30s
 
-  # Auth Service
+  # ==========================================
+  # 3. Intermediate Services (Wait for DBs & Eureka)
+  # ==========================================
   auth-service:
-    build:
+    build: 
       context: ./auth-service
-      dockerfile: Dockerfile
+      network: host  # <--- Added
     container_name: auth-service
-    ports:
-      - '8081:8081'
+    
     environment:
-      - SPRING_APPLICATION_NAME=auth-service
       - SERVER_PORT=8081
-      - SPRING_DATA_MONGODB_URI=mongodb://root:secret@mongodb:27017/auth_db?authSource=admin
+      - SPRING_PROFILES_ACTIVE=prod
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://service-discovery:8761/eureka/
-      - JWT_SECRET=your_jwt_secret_key
-      - JWT_EXPIRATION=86400000
+      - MONGODB_URI=mongodb://root:rootpassword@mongodb:27017/auth-database?authSource=admin
+      - JWT_CLIENT_PRIVATE_KEY_PATH=file:/app/keys/client_private_key.pem
+      - JWT_CLIENT_PUBLIC_KEY_PATH=file:/app/keys/client_public_key.pem
+      - JWT_GATEWAY_PUBLIC_KEY_PATH=file:/app/keys/gateway_public_key.pem
+      - HOST_IP=auth-service
     depends_on:
-      - mongodb
-        # condition: service_healthy
-      - service-discovery
-        # condition: service_healthy
+      service-discovery:
+        condition: service_started
+      mongodb:
+        condition: service_healthy
     networks:
       - gotrack-network
-    # healthcheck:
-    #   test: curl -f http://localhost:8081/actuator/health || exit 1
-    #   interval: 15s
-    #   timeout: 10s
-    #   retries: 5
-    #   start_period: 30s
 
-  # API Gateway
-  api-gateway:
-    build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
-    container_name: api-gateway
-    ports:
-      - '8080:8080'
+  core-logistic-finance:
+    build: 
+      context: ./core-logistic-finance
+      network: host  # <--- Added
+    container_name: core-logistic-finance
+    
     environment:
-      - SPRING_APPLICATION_NAME=api-gateway
-      - SERVER_PORT=8080
+      - SERVER_PORT=8082
+      - SPRING_PROFILES_ACTIVE=prod
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://service-discovery:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/gotrackdb?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootpassword
+      - JWT_GATEWAY_PUBLIC_KEY_PATH=file:/app/keys/gateway_public_key.pem
+      - HOST_IP=core-logistic-finance
     depends_on:
-      - service-discovery
-        # condition: service_healthy
+      service-discovery:
+        condition: service_started
+      mysql:
+        condition: service_healthy
     networks:
       - gotrack-network
-    # healthcheck:
-    #   test: curl -f http://localhost:8080/actuator/health || exit 1
-    #   interval: 15s
-    #   timeout: 10s
-    #   retries: 5
-    #   start_period: 30s
+
+  inventory-service:
+    build: 
+      context: ./inventory-service
+      network: host  # <--- Added
+    container_name: inventory-service
+    
+    environment:
+      - SERVER_PORT=8083
+      - SPRING_PROFILES_ACTIVE=prod
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://service-discovery:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/gotrackdb?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootpassword
+      - JWT_GATEWAY_PUBLIC_KEY_PATH=file:/app/keys/gateway_public_key.pem
+      - HOST_IP=inventory-service
+    depends_on:
+      service-discovery:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+    networks:
+      - gotrack-network
+
+  user-branch-service:
+    build: 
+      context: ./user-branch-service
+      network: host  # <--- Added
+    container_name: user-branch-service
+    
+    environment:
+      - SERVER_PORT=8084
+      - SPRING_PROFILES_ACTIVE=prod
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://service-discovery:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/userbranchdb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootpassword
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - JWT_GATEWAY_PUBLIC_KEY_PATH=file:/app/keys/gateway_public_key.pem
+      - HOST_IP=user-branch-service
+    depends_on:
+      service-discovery:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    networks:
+      - gotrack-network
+
+  # ==========================================
+  # 4. API Gateway starts last
+  # ==========================================
+  api-gateway:
+    build: 
+      context: ./api-gateway
+      network: host  # <--- Added
+    container_name: api-gateway
+    
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=prod
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://service-discovery:8761/eureka/
+      - JWT_GATEWAY_PRIVATE_KEY_PATH=file:/app/keys/gateway_private_key.pem
+      - JWT_GATEWAY_PUBLIC_KEY_PATH=file:/app/keys/gateway_public_key.pem
+      - JWT_CLIENT_PUBLIC_KEY_PATH=file:/app/keys/client_public_key.pem
+      - APP_CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:5174
+      - ML_SERVICE_URL=http://localhost:5000
+      - HOST_IP=api-gateway
+    depends_on:
+      service-discovery:
+        condition: service_started
+      auth-service:
+        condition: service_started
+      core-logistic-finance:
+        condition: service_started
+      inventory-service:
+        condition: service_started
+      user-branch-service:
+        condition: service_started
+    networks:
+      - gotrack-network
 
 networks:
   gotrack-network:
     driver: bridge
-
-volumes:
-  mongodb_data:
-  mongodb_config:

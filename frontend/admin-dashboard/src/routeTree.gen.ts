@@ -10,30 +10,27 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BranchRouteImport } from './routes/branch'
 import { Route as R404RouteImport } from './routes/404'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as DashboardShipmentsRouteImport } from './routes/dashboard/shipments'
-import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
-import { Route as DashboardProfilesRouteImport } from './routes/dashboard/profiles'
-import { Route as DashboardProductsRouteImport } from './routes/dashboard/products'
-import { Route as DashboardPickupsRouteImport } from './routes/dashboard/pickups'
-import { Route as DashboardInventoryRouteImport } from './routes/dashboard/inventory'
-import { Route as DashboardBranchesRouteImport } from './routes/dashboard/branches'
-import { Route as DashboardAccountsRouteImport } from './routes/dashboard/accounts'
-import { Route as DashboardProfileProfileIdRouteImport } from './routes/dashboard/profile/$profileId'
+import { Route as DashboardLayoutRouteImport } from './routes/dashboard/_layout'
+import { Route as DashboardLayoutIndexRouteImport } from './routes/dashboard/_layout/index'
+import { Route as DashboardLayoutShipmentsRouteImport } from './routes/dashboard/_layout/shipments'
+import { Route as DashboardLayoutSettingsRouteImport } from './routes/dashboard/_layout/settings'
+import { Route as DashboardLayoutProfilesRouteImport } from './routes/dashboard/_layout/profiles'
+import { Route as DashboardLayoutProfileRouteImport } from './routes/dashboard/_layout/profile'
+import { Route as DashboardLayoutProductsRouteImport } from './routes/dashboard/_layout/products'
+import { Route as DashboardLayoutPickupsRouteImport } from './routes/dashboard/_layout/pickups'
+import { Route as DashboardLayoutInventoryRouteImport } from './routes/dashboard/_layout/inventory'
+import { Route as DashboardLayoutBranchesRouteImport } from './routes/dashboard/_layout/branches'
+import { Route as DashboardLayoutAccountsRouteImport } from './routes/dashboard/_layout/accounts'
+import { Route as DashboardLayoutTestTestIdRouteImport } from './routes/dashboard/_layout/test/$testId'
+import { Route as DashboardLayoutProfileProfileIdRouteImport } from './routes/dashboard/_layout/profile/$profileId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BranchRoute = BranchRouteImport.update({
@@ -56,56 +53,74 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
+const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
+  id: '/dashboard/_layout',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardLayoutIndexRoute = DashboardLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
-const DashboardShipmentsRoute = DashboardShipmentsRouteImport.update({
-  id: '/shipments',
-  path: '/shipments',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+const DashboardLayoutShipmentsRoute =
+  DashboardLayoutShipmentsRouteImport.update({
+    id: '/shipments',
+    path: '/shipments',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutSettingsRoute = DashboardLayoutSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
-const DashboardProfilesRoute = DashboardProfilesRouteImport.update({
+const DashboardLayoutProfilesRoute = DashboardLayoutProfilesRouteImport.update({
   id: '/profiles',
   path: '/profiles',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
-const DashboardProductsRoute = DashboardProductsRouteImport.update({
+const DashboardLayoutProfileRoute = DashboardLayoutProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+const DashboardLayoutProductsRoute = DashboardLayoutProductsRouteImport.update({
   id: '/products',
   path: '/products',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
-const DashboardPickupsRoute = DashboardPickupsRouteImport.update({
+const DashboardLayoutPickupsRoute = DashboardLayoutPickupsRouteImport.update({
   id: '/pickups',
   path: '/pickups',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
-const DashboardInventoryRoute = DashboardInventoryRouteImport.update({
-  id: '/inventory',
-  path: '/inventory',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardBranchesRoute = DashboardBranchesRouteImport.update({
+const DashboardLayoutInventoryRoute =
+  DashboardLayoutInventoryRouteImport.update({
+    id: '/inventory',
+    path: '/inventory',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutBranchesRoute = DashboardLayoutBranchesRouteImport.update({
   id: '/branches',
   path: '/branches',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
-const DashboardAccountsRoute = DashboardAccountsRouteImport.update({
+const DashboardLayoutAccountsRoute = DashboardLayoutAccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
-const DashboardProfileProfileIdRoute =
-  DashboardProfileProfileIdRouteImport.update({
-    id: '/profile/$profileId',
-    path: '/profile/$profileId',
-    getParentRoute: () => DashboardRoute,
+const DashboardLayoutTestTestIdRoute =
+  DashboardLayoutTestTestIdRouteImport.update({
+    id: '/test/$testId',
+    path: '/test/$testId',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutProfileProfileIdRoute =
+  DashboardLayoutProfileProfileIdRouteImport.update({
+    id: '/$profileId',
+    path: '/$profileId',
+    getParentRoute: () => DashboardLayoutProfileRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -113,18 +128,20 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/404': typeof R404Route
   '/branch': typeof BranchRoute
-  '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard/accounts': typeof DashboardAccountsRoute
-  '/dashboard/branches': typeof DashboardBranchesRoute
-  '/dashboard/inventory': typeof DashboardInventoryRoute
-  '/dashboard/pickups': typeof DashboardPickupsRoute
-  '/dashboard/products': typeof DashboardProductsRoute
-  '/dashboard/profiles': typeof DashboardProfilesRoute
-  '/dashboard/settings': typeof DashboardSettingsRoute
-  '/dashboard/shipments': typeof DashboardShipmentsRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/profile/$profileId': typeof DashboardProfileProfileIdRoute
+  '/dashboard': typeof DashboardLayoutRouteWithChildren
+  '/dashboard/accounts': typeof DashboardLayoutAccountsRoute
+  '/dashboard/branches': typeof DashboardLayoutBranchesRoute
+  '/dashboard/inventory': typeof DashboardLayoutInventoryRoute
+  '/dashboard/pickups': typeof DashboardLayoutPickupsRoute
+  '/dashboard/products': typeof DashboardLayoutProductsRoute
+  '/dashboard/profile': typeof DashboardLayoutProfileRouteWithChildren
+  '/dashboard/profiles': typeof DashboardLayoutProfilesRoute
+  '/dashboard/settings': typeof DashboardLayoutSettingsRoute
+  '/dashboard/shipments': typeof DashboardLayoutShipmentsRoute
+  '/dashboard/': typeof DashboardLayoutIndexRoute
+  '/dashboard/profile/$profileId': typeof DashboardLayoutProfileProfileIdRoute
+  '/dashboard/test/$testId': typeof DashboardLayoutTestTestIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -132,16 +149,18 @@ export interface FileRoutesByTo {
   '/404': typeof R404Route
   '/branch': typeof BranchRoute
   '/login': typeof LoginRoute
-  '/dashboard/accounts': typeof DashboardAccountsRoute
-  '/dashboard/branches': typeof DashboardBranchesRoute
-  '/dashboard/inventory': typeof DashboardInventoryRoute
-  '/dashboard/pickups': typeof DashboardPickupsRoute
-  '/dashboard/products': typeof DashboardProductsRoute
-  '/dashboard/profiles': typeof DashboardProfilesRoute
-  '/dashboard/settings': typeof DashboardSettingsRoute
-  '/dashboard/shipments': typeof DashboardShipmentsRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/dashboard/profile/$profileId': typeof DashboardProfileProfileIdRoute
+  '/dashboard/accounts': typeof DashboardLayoutAccountsRoute
+  '/dashboard/branches': typeof DashboardLayoutBranchesRoute
+  '/dashboard/inventory': typeof DashboardLayoutInventoryRoute
+  '/dashboard/pickups': typeof DashboardLayoutPickupsRoute
+  '/dashboard/products': typeof DashboardLayoutProductsRoute
+  '/dashboard/profile': typeof DashboardLayoutProfileRouteWithChildren
+  '/dashboard/profiles': typeof DashboardLayoutProfilesRoute
+  '/dashboard/settings': typeof DashboardLayoutSettingsRoute
+  '/dashboard/shipments': typeof DashboardLayoutShipmentsRoute
+  '/dashboard': typeof DashboardLayoutIndexRoute
+  '/dashboard/profile/$profileId': typeof DashboardLayoutProfileProfileIdRoute
+  '/dashboard/test/$testId': typeof DashboardLayoutTestTestIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -149,18 +168,20 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/404': typeof R404Route
   '/branch': typeof BranchRoute
-  '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard/accounts': typeof DashboardAccountsRoute
-  '/dashboard/branches': typeof DashboardBranchesRoute
-  '/dashboard/inventory': typeof DashboardInventoryRoute
-  '/dashboard/pickups': typeof DashboardPickupsRoute
-  '/dashboard/products': typeof DashboardProductsRoute
-  '/dashboard/profiles': typeof DashboardProfilesRoute
-  '/dashboard/settings': typeof DashboardSettingsRoute
-  '/dashboard/shipments': typeof DashboardShipmentsRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/profile/$profileId': typeof DashboardProfileProfileIdRoute
+  '/dashboard/_layout': typeof DashboardLayoutRouteWithChildren
+  '/dashboard/_layout/accounts': typeof DashboardLayoutAccountsRoute
+  '/dashboard/_layout/branches': typeof DashboardLayoutBranchesRoute
+  '/dashboard/_layout/inventory': typeof DashboardLayoutInventoryRoute
+  '/dashboard/_layout/pickups': typeof DashboardLayoutPickupsRoute
+  '/dashboard/_layout/products': typeof DashboardLayoutProductsRoute
+  '/dashboard/_layout/profile': typeof DashboardLayoutProfileRouteWithChildren
+  '/dashboard/_layout/profiles': typeof DashboardLayoutProfilesRoute
+  '/dashboard/_layout/settings': typeof DashboardLayoutSettingsRoute
+  '/dashboard/_layout/shipments': typeof DashboardLayoutShipmentsRoute
+  '/dashboard/_layout/': typeof DashboardLayoutIndexRoute
+  '/dashboard/_layout/profile/$profileId': typeof DashboardLayoutProfileProfileIdRoute
+  '/dashboard/_layout/test/$testId': typeof DashboardLayoutTestTestIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -169,18 +190,20 @@ export interface FileRouteTypes {
     | '/$'
     | '/404'
     | '/branch'
-    | '/dashboard'
     | '/login'
+    | '/dashboard'
     | '/dashboard/accounts'
     | '/dashboard/branches'
     | '/dashboard/inventory'
     | '/dashboard/pickups'
     | '/dashboard/products'
+    | '/dashboard/profile'
     | '/dashboard/profiles'
     | '/dashboard/settings'
     | '/dashboard/shipments'
     | '/dashboard/'
     | '/dashboard/profile/$profileId'
+    | '/dashboard/test/$testId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -193,29 +216,33 @@ export interface FileRouteTypes {
     | '/dashboard/inventory'
     | '/dashboard/pickups'
     | '/dashboard/products'
+    | '/dashboard/profile'
     | '/dashboard/profiles'
     | '/dashboard/settings'
     | '/dashboard/shipments'
     | '/dashboard'
     | '/dashboard/profile/$profileId'
+    | '/dashboard/test/$testId'
   id:
     | '__root__'
     | '/'
     | '/$'
     | '/404'
     | '/branch'
-    | '/dashboard'
     | '/login'
-    | '/dashboard/accounts'
-    | '/dashboard/branches'
-    | '/dashboard/inventory'
-    | '/dashboard/pickups'
-    | '/dashboard/products'
-    | '/dashboard/profiles'
-    | '/dashboard/settings'
-    | '/dashboard/shipments'
-    | '/dashboard/'
-    | '/dashboard/profile/$profileId'
+    | '/dashboard/_layout'
+    | '/dashboard/_layout/accounts'
+    | '/dashboard/_layout/branches'
+    | '/dashboard/_layout/inventory'
+    | '/dashboard/_layout/pickups'
+    | '/dashboard/_layout/products'
+    | '/dashboard/_layout/profile'
+    | '/dashboard/_layout/profiles'
+    | '/dashboard/_layout/settings'
+    | '/dashboard/_layout/shipments'
+    | '/dashboard/_layout/'
+    | '/dashboard/_layout/profile/$profileId'
+    | '/dashboard/_layout/test/$testId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -223,8 +250,8 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   R404Route: typeof R404Route
   BranchRoute: typeof BranchRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
   LoginRoute: typeof LoginRoute
+  DashboardLayoutRoute: typeof DashboardLayoutRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -234,13 +261,6 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/branch': {
@@ -271,107 +291,144 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/': {
-      id: '/dashboard/'
+    '/dashboard/_layout': {
+      id: '/dashboard/_layout'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/_layout/': {
+      id: '/dashboard/_layout/'
       path: '/'
       fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof DashboardLayoutIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/dashboard/shipments': {
-      id: '/dashboard/shipments'
+    '/dashboard/_layout/shipments': {
+      id: '/dashboard/_layout/shipments'
       path: '/shipments'
       fullPath: '/dashboard/shipments'
-      preLoaderRoute: typeof DashboardShipmentsRouteImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof DashboardLayoutShipmentsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/dashboard/settings': {
-      id: '/dashboard/settings'
+    '/dashboard/_layout/settings': {
+      id: '/dashboard/_layout/settings'
       path: '/settings'
       fullPath: '/dashboard/settings'
-      preLoaderRoute: typeof DashboardSettingsRouteImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof DashboardLayoutSettingsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/dashboard/profiles': {
-      id: '/dashboard/profiles'
+    '/dashboard/_layout/profiles': {
+      id: '/dashboard/_layout/profiles'
       path: '/profiles'
       fullPath: '/dashboard/profiles'
-      preLoaderRoute: typeof DashboardProfilesRouteImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof DashboardLayoutProfilesRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/dashboard/products': {
-      id: '/dashboard/products'
+    '/dashboard/_layout/profile': {
+      id: '/dashboard/_layout/profile'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof DashboardLayoutProfileRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/dashboard/_layout/products': {
+      id: '/dashboard/_layout/products'
       path: '/products'
       fullPath: '/dashboard/products'
-      preLoaderRoute: typeof DashboardProductsRouteImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof DashboardLayoutProductsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/dashboard/pickups': {
-      id: '/dashboard/pickups'
+    '/dashboard/_layout/pickups': {
+      id: '/dashboard/_layout/pickups'
       path: '/pickups'
       fullPath: '/dashboard/pickups'
-      preLoaderRoute: typeof DashboardPickupsRouteImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof DashboardLayoutPickupsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/dashboard/inventory': {
-      id: '/dashboard/inventory'
+    '/dashboard/_layout/inventory': {
+      id: '/dashboard/_layout/inventory'
       path: '/inventory'
       fullPath: '/dashboard/inventory'
-      preLoaderRoute: typeof DashboardInventoryRouteImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof DashboardLayoutInventoryRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/dashboard/branches': {
-      id: '/dashboard/branches'
+    '/dashboard/_layout/branches': {
+      id: '/dashboard/_layout/branches'
       path: '/branches'
       fullPath: '/dashboard/branches'
-      preLoaderRoute: typeof DashboardBranchesRouteImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof DashboardLayoutBranchesRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/dashboard/accounts': {
-      id: '/dashboard/accounts'
+    '/dashboard/_layout/accounts': {
+      id: '/dashboard/_layout/accounts'
       path: '/accounts'
       fullPath: '/dashboard/accounts'
-      preLoaderRoute: typeof DashboardAccountsRouteImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof DashboardLayoutAccountsRouteImport
+      parentRoute: typeof DashboardLayoutRoute
     }
-    '/dashboard/profile/$profileId': {
-      id: '/dashboard/profile/$profileId'
-      path: '/profile/$profileId'
+    '/dashboard/_layout/test/$testId': {
+      id: '/dashboard/_layout/test/$testId'
+      path: '/test/$testId'
+      fullPath: '/dashboard/test/$testId'
+      preLoaderRoute: typeof DashboardLayoutTestTestIdRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/dashboard/_layout/profile/$profileId': {
+      id: '/dashboard/_layout/profile/$profileId'
+      path: '/$profileId'
       fullPath: '/dashboard/profile/$profileId'
-      preLoaderRoute: typeof DashboardProfileProfileIdRouteImport
-      parentRoute: typeof DashboardRoute
+      preLoaderRoute: typeof DashboardLayoutProfileProfileIdRouteImport
+      parentRoute: typeof DashboardLayoutProfileRoute
     }
   }
 }
 
-interface DashboardRouteChildren {
-  DashboardAccountsRoute: typeof DashboardAccountsRoute
-  DashboardBranchesRoute: typeof DashboardBranchesRoute
-  DashboardInventoryRoute: typeof DashboardInventoryRoute
-  DashboardPickupsRoute: typeof DashboardPickupsRoute
-  DashboardProductsRoute: typeof DashboardProductsRoute
-  DashboardProfilesRoute: typeof DashboardProfilesRoute
-  DashboardSettingsRoute: typeof DashboardSettingsRoute
-  DashboardShipmentsRoute: typeof DashboardShipmentsRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  DashboardProfileProfileIdRoute: typeof DashboardProfileProfileIdRoute
+interface DashboardLayoutProfileRouteChildren {
+  DashboardLayoutProfileProfileIdRoute: typeof DashboardLayoutProfileProfileIdRoute
 }
 
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardAccountsRoute: DashboardAccountsRoute,
-  DashboardBranchesRoute: DashboardBranchesRoute,
-  DashboardInventoryRoute: DashboardInventoryRoute,
-  DashboardPickupsRoute: DashboardPickupsRoute,
-  DashboardProductsRoute: DashboardProductsRoute,
-  DashboardProfilesRoute: DashboardProfilesRoute,
-  DashboardSettingsRoute: DashboardSettingsRoute,
-  DashboardShipmentsRoute: DashboardShipmentsRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-  DashboardProfileProfileIdRoute: DashboardProfileProfileIdRoute,
+const DashboardLayoutProfileRouteChildren: DashboardLayoutProfileRouteChildren =
+  {
+    DashboardLayoutProfileProfileIdRoute: DashboardLayoutProfileProfileIdRoute,
+  }
+
+const DashboardLayoutProfileRouteWithChildren =
+  DashboardLayoutProfileRoute._addFileChildren(
+    DashboardLayoutProfileRouteChildren,
+  )
+
+interface DashboardLayoutRouteChildren {
+  DashboardLayoutAccountsRoute: typeof DashboardLayoutAccountsRoute
+  DashboardLayoutBranchesRoute: typeof DashboardLayoutBranchesRoute
+  DashboardLayoutInventoryRoute: typeof DashboardLayoutInventoryRoute
+  DashboardLayoutPickupsRoute: typeof DashboardLayoutPickupsRoute
+  DashboardLayoutProductsRoute: typeof DashboardLayoutProductsRoute
+  DashboardLayoutProfileRoute: typeof DashboardLayoutProfileRouteWithChildren
+  DashboardLayoutProfilesRoute: typeof DashboardLayoutProfilesRoute
+  DashboardLayoutSettingsRoute: typeof DashboardLayoutSettingsRoute
+  DashboardLayoutShipmentsRoute: typeof DashboardLayoutShipmentsRoute
+  DashboardLayoutIndexRoute: typeof DashboardLayoutIndexRoute
+  DashboardLayoutTestTestIdRoute: typeof DashboardLayoutTestTestIdRoute
 }
 
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
+const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
+  DashboardLayoutAccountsRoute: DashboardLayoutAccountsRoute,
+  DashboardLayoutBranchesRoute: DashboardLayoutBranchesRoute,
+  DashboardLayoutInventoryRoute: DashboardLayoutInventoryRoute,
+  DashboardLayoutPickupsRoute: DashboardLayoutPickupsRoute,
+  DashboardLayoutProductsRoute: DashboardLayoutProductsRoute,
+  DashboardLayoutProfileRoute: DashboardLayoutProfileRouteWithChildren,
+  DashboardLayoutProfilesRoute: DashboardLayoutProfilesRoute,
+  DashboardLayoutSettingsRoute: DashboardLayoutSettingsRoute,
+  DashboardLayoutShipmentsRoute: DashboardLayoutShipmentsRoute,
+  DashboardLayoutIndexRoute: DashboardLayoutIndexRoute,
+  DashboardLayoutTestTestIdRoute: DashboardLayoutTestTestIdRoute,
+}
+
+const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
+  DashboardLayoutRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
@@ -379,8 +436,8 @@ const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   R404Route: R404Route,
   BranchRoute: BranchRoute,
-  DashboardRoute: DashboardRouteWithChildren,
   LoginRoute: LoginRoute,
+  DashboardLayoutRoute: DashboardLayoutRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

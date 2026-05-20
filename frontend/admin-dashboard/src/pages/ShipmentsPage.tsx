@@ -137,7 +137,7 @@ export const ShipmentsPage = () => {
     pickupsData?.content?.map((p: PickupRequestDTO) => ({
       id: String(p.id || ""),
       code: `#${String(p.id || "").padStart(5, "0")}`,
-      merchantName: `تاجر #${p.merchantProfileId}`,
+      merchantName: `تاجر #${p.MERCHANTId}`,
     })) || [];
 
   const branches: { id: string; name: string }[] =

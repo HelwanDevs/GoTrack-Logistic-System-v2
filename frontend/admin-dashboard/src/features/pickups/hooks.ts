@@ -33,7 +33,7 @@ export const useSearchPickupsQuery = (params: PickupFilter) => {
     staleTime: 30 * 1000,
     enabled:
       Boolean(params.status) ||
-      params.merchantProfileId !== undefined ||
+      params.MERCHANTId !== undefined ||
       params.courierProfileId !== undefined ||
       params.branchId !== undefined,
   });

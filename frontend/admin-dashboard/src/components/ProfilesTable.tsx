@@ -6,7 +6,7 @@ import { Select } from "@/components/Select";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Pagination } from "@/components/Pagination";
 import { SearchableSelect } from "@/components/SearchableSelect";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -215,12 +215,13 @@ export const ProfilesTable = ({
                           className="text-body-sm w-50!"
                         />
                       ) : (
-                        <button
-                          onClick={() => navigate({ to: "/dashboard/profile/$profileId", params: { profileId: profile.id } })}
+                        <Link
+                          to="/dashboard/profile/$profileId" 
+                          params={{ profileId: '1' }}
                           className="text-body-md text-on-surface hover:text-primary text-left font-medium transition-colors"
                         >
                           {profile.full_name}
-                        </button>
+                        </Link>
                       )}
                     </div>
                   </td>

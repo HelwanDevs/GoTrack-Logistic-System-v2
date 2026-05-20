@@ -3,9 +3,9 @@ import { checkIsEmployee, checkIsAuthenticated } from "@/features/auth";
 import { Sidebar } from "@/components/Sidebar";
 export const Route = createFileRoute("/branch")({
   beforeLoad: async () => {
-    // if (!checkIsAuthenticated() || !checkIsEmployee()) {
-    //   throw redirect({ to: "/login" });
-    // }
+    if (!checkIsAuthenticated() || !checkIsEmployee()) {
+      throw redirect({ to: "/login" });
+    }
   },
   component: () => (
     <div className="min-h-screen bg-background flex flex-row" dir="rtl">

@@ -3,7 +3,7 @@
     "_postman_id": "se2-api-collection",
     "name": "GoTrack SE-2 API Collection",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Comprehensive API test collection for the GoTrack Logistics platform covering auth-service, user-branch-service, and inventory-service. Includes auth flow, CRUD operations, service-to-service integration via Feign, error cases, and full data-flow test scenarios.\n\n## Setup Instructions\n1. Set environment variables before running:\n   - `baseUrl_auth` → http://localhost:8081\n   - `baseUrl_branch` → http://localhost:8082\n   - `baseUrl_inventory` → http://localhost:8083\n2. Run the 'Auth Flow' folder first to capture accessToken and refreshToken.\n3. All subsequent requests use {{accessToken}} in the Authorization header."
+    "description": "Comprehensive API test collection for the GoTrack Logistics platform covering auth-service, user-branch-service, and inventory-service. Includes auth flow, CRUD operations, service-to-service integration via Feign, error cases, and full data-flow test scenarios.\n\n## Setup Instructions\n1. Set environment variables before running:\n   - `baseUrl_auth` → http://localhost:8080\n   - `baseUrl_branch` → http://localhost:8080\n   - `baseUrl_inventory` → http://localhost:8080\n2. Run the 'Auth Flow' folder first to capture accessToken and refreshToken.\n3. All subsequent requests use {{accessToken}} in the Authorization header."
   },
   "variable": [
     {

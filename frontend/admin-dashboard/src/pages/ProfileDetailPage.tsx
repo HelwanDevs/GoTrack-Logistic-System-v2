@@ -31,14 +31,8 @@ import {
   useProductsByMerchantQuery,
   type ProductDTO,
 } from "@/features/inventory";
-import {
-  useWalletsSearchQuery,
-  type WalletDTO,
-} from "@/features/wallets";
-import {
-  useBranchesQuery,
-  type BranchDTO,
-} from "@/features/branches";
+import { useWalletsSearchQuery, type WalletDTO } from "@/features/wallets";
+import { useBranchesQuery, type BranchDTO } from "@/features/branches";
 
 interface ProfileWithDetails extends ProfileResponseDTO {
   account?: {
@@ -49,9 +43,9 @@ interface ProfileWithDetails extends ProfileResponseDTO {
 }
 
 export const ProfileDetailPage = () => {
-  const { profileId } = useParams({ from: "/dashboard/profile/$profileId" });
+  const { profileId } = useParams({ from: "/dashboard/_layout/profile/$profileId" });
   const navigate = useNavigate();
-  
+
   // ── UI State ──
   const [showEditForm, setShowEditForm] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
@@ -81,37 +75,30 @@ export const ProfileDetailPage = () => {
   const updateMutation = useUpdateProfileMutation();
 
   // ── Related Data Hooks ──
-  const {
-    data: shipmentsData,
-    isLoading: shipmentsLoading,
-  } = useSearchShipmentsQuery({
-    page: shipmentsPage,
-    size: pageSize,
+  const { data: shipmentsData, isLoading: shipmentsLoading } =
+    useSearchShipmentsQuery({
+      page: shipmentsPage,
+      size: pageSize,
+    });
+
+  const { data: pickupsData, isLoading: pickupsLoading } =
+    useSearchPickupsQuery({
+      MERCHANTId: Number(profileId),
+      page: pickupsPage,
+      size: pageSize,
+    });
+
+  const { data: productsData, isLoading: productsLoading } =
+    useProductsByMerchantQuery(Number(profileId), productsPage, pageSize);
+
+  const { data: walletData, isLoading: walletLoading } = useWalletsSearchQuery(
+    Number(profileId),
+  );
+
+  const { data: branchesData, isLoading: branchesLoading } = useBranchesQuery({
+    page: 0,
+    size: 100,
   });
-
-  const {
-    data: pickupsData,
-    isLoading: pickupsLoading,
-  } = useSearchPickupsQuery({
-    merchantProfileId: Number(profileId),
-    page: pickupsPage,
-    size: pageSize,
-  });
-
-  const {
-    data: productsData,
-    isLoading: productsLoading,
-  } = useProductsByMerchantQuery(Number(profileId), productsPage, pageSize);
-
-  const {
-    data: walletData,
-    isLoading: walletLoading,
-  } = useWalletsSearchQuery(Number(profileId));
-
-  const {
-    data: branchesData,
-    isLoading: branchesLoading,
-  } = useBranchesQuery({ page: 0, size: 100 });
 
   const shipments = shipmentsData?.content || [];
   const pickups = pickupsData?.content || [];
@@ -143,7 +130,10 @@ export const ProfileDetailPage = () => {
   };
 
   const getStatusBadge = (status: ProfileStatus | string) => {
-    const statusColors: Record<string, { bg: string; text: string; label: string }> = {
+    const statusColors: Record<
+      string,
+      { bg: string; text: string; label: string }
+    > = {
       [ProfileStatus.ACTIVE]: {
         bg: "bg-emerald-100",
         text: "text-emerald-700",
@@ -169,7 +159,7 @@ export const ProfileDetailPage = () => {
         text: "text-emerald-700",
         label: "تم التسليم",
       },
-            [PickupStatus.ASSIGNED]: {
+      [PickupStatus.ASSIGNED]: {
         bg: "bg-blue-100",
         text: "text-blue-700",
         label: "تم تعيين مندوب",
@@ -181,7 +171,8 @@ export const ProfileDetailPage = () => {
       },
     };
 
-    const colors = statusColors[status as string] || statusColors[ProfileStatus.ACTIVE];
+    const colors =
+      statusColors[status as string] || statusColors[ProfileStatus.ACTIVE];
     if (!colors) return null;
 
     return (
@@ -252,7 +243,8 @@ export const ProfileDetailPage = () => {
               معلومات التاجر
             </h2>
             <p className="text-body-sm text-on-surface-variant">
-              {getProfileTypeLabel(profile.type)} - {getStatusBadge(profile.status)}
+              {getProfileTypeLabel(profile.type)} -{" "}
+              {getStatusBadge(profile.status)}
             </p>
           </div>
           <div className="flex gap-3">
@@ -275,35 +267,54 @@ export const ProfileDetailPage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div>
-            <label className="text-label-sm text-on-surface-variant">الاسم الكامل</label>
-            <p className="text-body-md text-on-background mt-1">{profile.fullName}</p>
-          </div>
-          <div>
-            <label className="text-label-sm text-on-surface-variant">رقم الهاتف</label>
-            <p className="text-body-md text-on-background mt-1">{profile.phoneNumber}</p>
-          </div>
-          <div>
-            <label className="text-label-sm text-on-surface-variant">الفرع</label>
+            <label className="text-label-sm text-on-surface-variant">
+              الاسم الكامل
+            </label>
             <p className="text-body-md text-on-background mt-1">
-              {branches.find(b => b.id === profile.branchId)?.name || "غير محدد"}
+              {profile.fullName}
             </p>
           </div>
           <div>
-            <label className="text-label-sm text-on-surface-variant">الحساب</label>
+            <label className="text-label-sm text-on-surface-variant">
+              رقم الهاتف
+            </label>
+            <p className="text-body-md text-on-background mt-1">
+              {profile.phoneNumber}
+            </p>
+          </div>
+          <div>
+            <label className="text-label-sm text-on-surface-variant">
+              الفرع
+            </label>
+            <p className="text-body-md text-on-background mt-1">
+              {branches.find((b) => b.id === profile.branchId)?.name ||
+                "غير محدد"}
+            </p>
+          </div>
+          <div>
+            <label className="text-label-sm text-on-surface-variant">
+              الحساب
+            </label>
             <p className="text-body-md text-on-background mt-1">
               {profile.accountId ? `#${profile.accountId}` : "غير مرتبط"}
             </p>
           </div>
           <div>
-            <label className="text-label-sm text-on-surface-variant">تاريخ الإنشاء</label>
+            <label className="text-label-sm text-on-surface-variant">
+              تاريخ الإنشاء
+            </label>
             <p className="text-body-md text-on-background mt-1">
-              {profile.createdAt ? new Date(profile.createdAt).toLocaleDateString("ar-EG") : "غير محدد"}
+              {profile.createdAt
+                ? new Date(profile.createdAt).toLocaleDateString("ar-EG")
+                : "غير محدد"}
             </p>
           </div>
           <div>
-            <label className="text-label-sm text-on-surface-variant">رصيد المحفظة</label>
+            <label className="text-label-sm text-on-surface-variant">
+              رصيد المحفظة
+            </label>
             <p className="text-body-md text-on-background mt-1 font-bold text-primary">
-              {wallet?.balance || 0} ريال
+              {wallet?.balance || 0} جنية
             </p>
           </div>
         </div>
@@ -378,7 +389,7 @@ export const ProfileDetailPage = () => {
               {wallet?.balance || 0}
             </div>
             <div className="font-label-md text-label-md text-on-surface-variant">
-              رصيد المحفظة (ريال)
+              رصيد المحفظة (جنية)
             </div>
           </div>
         </Card>
@@ -418,8 +429,12 @@ export const ProfileDetailPage = () => {
             {profile.accountId ? (
               <div className="space-y-4">
                 <div>
-                  <label className="text-label-sm text-on-surface-variant">معرف الحساب</label>
-                  <p className="text-body-md text-on-background mt-1">#{profile.accountId}</p>
+                  <label className="text-label-sm text-on-surface-variant">
+                    معرف الحساب
+                  </label>
+                  <p className="text-body-md text-on-background mt-1">
+                    #{profile.accountId}
+                  </p>
                 </div>
                 {/* Additional account info would go here */}
               </div>
@@ -466,7 +481,9 @@ export const ProfileDetailPage = () => {
                         </td>
                         <td className="p-4 text-body-sm">
                           {shipment.createdAt
-                            ? new Date(shipment.createdAt).toLocaleDateString("ar-EG")
+                            ? new Date(shipment.createdAt).toLocaleDateString(
+                                "ar-EG",
+                              )
                             : "غير محدد"}
                         </td>
                       </tr>
@@ -475,7 +492,9 @@ export const ProfileDetailPage = () => {
                 </table>
               </div>
             ) : (
-              <p className="text-on-surface-variant text-center py-8">لا توجد شحنات</p>
+              <p className="text-on-surface-variant text-center py-8">
+                لا توجد شحنات
+              </p>
             )}
           </Card>
         )}
@@ -513,11 +532,15 @@ export const ProfileDetailPage = () => {
                           #{String(pickup.id || "").padStart(5, "0")}
                         </td>
                         <td className="p-4">
-                          {getStatusBadge(pickup.status || PickupStatus.PENDING)}
+                          {getStatusBadge(
+                            pickup.status || PickupStatus.PENDING,
+                          )}
                         </td>
                         <td className="p-4 text-body-sm">
                           {pickup.createdAt
-                            ? new Date(pickup.createdAt).toLocaleDateString("ar-EG")
+                            ? new Date(pickup.createdAt).toLocaleDateString(
+                                "ar-EG",
+                              )
                             : "غير محدد"}
                         </td>
                       </tr>
@@ -526,7 +549,9 @@ export const ProfileDetailPage = () => {
                 </table>
               </div>
             ) : (
-              <p className="text-on-surface-variant text-center py-8">لا توجد طلبات بيك آب</p>
+              <p className="text-on-surface-variant text-center py-8">
+                لا توجد طلبات بيك آب
+              </p>
             )}
           </Card>
         )}
@@ -569,7 +594,9 @@ export const ProfileDetailPage = () => {
                 </table>
               </div>
             ) : (
-              <p className="text-on-surface-variant text-center py-8">لا توجد منتجات</p>
+              <p className="text-on-surface-variant text-center py-8">
+                لا توجد منتجات
+              </p>
             )}
           </Card>
         )}
@@ -586,7 +613,8 @@ export const ProfileDetailPage = () => {
               معلومات مندوب التوصيل
             </h2>
             <p className="text-body-sm text-on-surface-variant">
-              {getProfileTypeLabel(profile.type)} - {getStatusBadge(profile.status)}
+              {getProfileTypeLabel(profile.type)} -{" "}
+              {getStatusBadge(profile.status)}
             </p>
           </div>
           <Button
@@ -600,23 +628,36 @@ export const ProfileDetailPage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div>
-            <label className="text-label-sm text-on-surface-variant">الاسم الكامل</label>
-            <p className="text-body-md text-on-background mt-1">{profile.fullName}</p>
-          </div>
-          <div>
-            <label className="text-label-sm text-on-surface-variant">رقم الهاتف</label>
-            <p className="text-body-md text-on-background mt-1">{profile.phoneNumber}</p>
-          </div>
-          <div>
-            <label className="text-label-sm text-on-surface-variant">الفرع</label>
+            <label className="text-label-sm text-on-surface-variant">
+              الاسم الكامل
+            </label>
             <p className="text-body-md text-on-background mt-1">
-              {branches.find(b => b.id === profile.branchId)?.name || "غير محدد"}
+              {profile.fullName}
             </p>
           </div>
           <div>
-            <label className="text-label-sm text-on-surface-variant">رصيد المحفظة</label>
+            <label className="text-label-sm text-on-surface-variant">
+              رقم الهاتف
+            </label>
+            <p className="text-body-md text-on-background mt-1">
+              {profile.phoneNumber}
+            </p>
+          </div>
+          <div>
+            <label className="text-label-sm text-on-surface-variant">
+              الفرع
+            </label>
+            <p className="text-body-md text-on-background mt-1">
+              {branches.find((b) => b.id === profile.branchId)?.name ||
+                "غير محدد"}
+            </p>
+          </div>
+          <div>
+            <label className="text-label-sm text-on-surface-variant">
+              رصيد المحفظة
+            </label>
             <p className="text-body-md text-on-background mt-1 font-bold text-primary">
-              {wallet?.balance || 0} ريال
+              {wallet?.balance || 0} جنية
             </p>
           </div>
         </div>
@@ -654,7 +695,7 @@ export const ProfileDetailPage = () => {
                     <td className="p-4 font-bold text-primary">
                       #{String(pickup.id || "").padStart(5, "0")}
                     </td>
-                    <td className="p-4">تاجر #{pickup.merchantProfileId}</td>
+                    <td className="p-4">تاجر #{pickup.MERCHANTId}</td>
                     <td className="p-4">
                       {getStatusBadge(pickup.status || PickupStatus.PENDING)}
                     </td>
@@ -664,7 +705,9 @@ export const ProfileDetailPage = () => {
             </table>
           </div>
         ) : (
-          <p className="text-on-surface-variant text-center py-8">لا توجد طلبات معينة</p>
+          <p className="text-on-surface-variant text-center py-8">
+            لا توجد طلبات معينة
+          </p>
         )}
       </Card>
     </div>
@@ -679,7 +722,8 @@ export const ProfileDetailPage = () => {
               معلومات الموظف
             </h2>
             <p className="text-body-sm text-on-surface-variant">
-              {getProfileTypeLabel(profile.type)} - {getStatusBadge(profile.status)}
+              {getProfileTypeLabel(profile.type)} -{" "}
+              {getStatusBadge(profile.status)}
             </p>
           </div>
           <Button
@@ -693,17 +737,28 @@ export const ProfileDetailPage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div>
-            <label className="text-label-sm text-on-surface-variant">الاسم الكامل</label>
-            <p className="text-body-md text-on-background mt-1">{profile.fullName}</p>
-          </div>
-          <div>
-            <label className="text-label-sm text-on-surface-variant">رقم الهاتف</label>
-            <p className="text-body-md text-on-background mt-1">{profile.phoneNumber}</p>
-          </div>
-          <div>
-            <label className="text-label-sm text-on-surface-variant">الفرع</label>
+            <label className="text-label-sm text-on-surface-variant">
+              الاسم الكامل
+            </label>
             <p className="text-body-md text-on-background mt-1">
-              {branches.find(b => b.id === profile.branchId)?.name || "غير محدد"}
+              {profile.fullName}
+            </p>
+          </div>
+          <div>
+            <label className="text-label-sm text-on-surface-variant">
+              رقم الهاتف
+            </label>
+            <p className="text-body-md text-on-background mt-1">
+              {profile.phoneNumber}
+            </p>
+          </div>
+          <div>
+            <label className="text-label-sm text-on-surface-variant">
+              الفرع
+            </label>
+            <p className="text-body-md text-on-background mt-1">
+              {branches.find((b) => b.id === profile.branchId)?.name ||
+                "غير محدد"}
             </p>
           </div>
         </div>
@@ -720,7 +775,8 @@ export const ProfileDetailPage = () => {
               معلومات مدير النظام
             </h2>
             <p className="text-body-sm text-on-surface-variant">
-              {getProfileTypeLabel(profile.type)} - {getStatusBadge(profile.status)}
+              {getProfileTypeLabel(profile.type)} -{" "}
+              {getStatusBadge(profile.status)}
             </p>
           </div>
           <Button
@@ -734,15 +790,25 @@ export const ProfileDetailPage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div>
-            <label className="text-label-sm text-on-surface-variant">الاسم الكامل</label>
-            <p className="text-body-md text-on-background mt-1">{profile.fullName}</p>
+            <label className="text-label-sm text-on-surface-variant">
+              الاسم الكامل
+            </label>
+            <p className="text-body-md text-on-background mt-1">
+              {profile.fullName}
+            </p>
           </div>
           <div>
-            <label className="text-label-sm text-on-surface-variant">رقم الهاتف</label>
-            <p className="text-body-md text-on-background mt-1">{profile.phoneNumber}</p>
+            <label className="text-label-sm text-on-surface-variant">
+              رقم الهاتف
+            </label>
+            <p className="text-body-md text-on-background mt-1">
+              {profile.phoneNumber}
+            </p>
           </div>
           <div>
-            <label className="text-label-sm text-on-surface-variant">صلاحيات النظام</label>
+            <label className="text-label-sm text-on-surface-variant">
+              صلاحيات النظام
+            </label>
             <p className="text-body-md text-on-background mt-1">كاملة</p>
           </div>
         </div>
@@ -810,7 +876,10 @@ export const ProfileDetailPage = () => {
                 label="الحالة"
                 value={editForm.status || profile.status}
                 onChange={(e) =>
-                  setEditForm({ ...editForm, status: e.target.value as ProfileStatus })
+                  setEditForm({
+                    ...editForm,
+                    status: e.target.value as ProfileStatus,
+                  })
                 }
                 options={[
                   { value: ProfileStatus.ACTIVE, label: "نشط" },
@@ -827,7 +896,10 @@ export const ProfileDetailPage = () => {
                 }
                 options={[
                   { value: "", label: "اختر الفرع" },
-                  ...branches.map((b) => ({ value: String(b.id), label: b.name })),
+                  ...branches.map((b) => ({
+                    value: String(b.id),
+                    label: b.name,
+                  })),
                 ]}
               />
             </div>
@@ -842,10 +914,7 @@ export const ProfileDetailPage = () => {
             >
               {updateMutation.isPending ? "جاري التحديث..." : "تحديث"}
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => setShowEditForm(false)}
-            >
+            <Button variant="outline" onClick={() => setShowEditForm(false)}>
               إلغاء
             </Button>
           </div>
@@ -866,7 +935,10 @@ export const ProfileDetailPage = () => {
                 type="number"
                 value={transactionForm.amount}
                 onChange={(e) =>
-                  setTransactionForm({ ...transactionForm, amount: e.target.value })
+                  setTransactionForm({
+                    ...transactionForm,
+                    amount: e.target.value,
+                  })
                 }
                 placeholder="0.00"
               />
@@ -876,7 +948,10 @@ export const ProfileDetailPage = () => {
                 label="نوع المعاملة"
                 value={transactionForm.type}
                 onChange={(e) =>
-                  setTransactionForm({ ...transactionForm, type: e.target.value })
+                  setTransactionForm({
+                    ...transactionForm,
+                    type: e.target.value,
+                  })
                 }
                 options={[
                   { value: "CREDIT", label: "إيداع" },
@@ -889,7 +964,10 @@ export const ProfileDetailPage = () => {
                 label="الوصف"
                 value={transactionForm.description}
                 onChange={(e) =>
-                  setTransactionForm({ ...transactionForm, description: e.target.value })
+                  setTransactionForm({
+                    ...transactionForm,
+                    description: e.target.value,
+                  })
                 }
                 placeholder="وصف المعاملة"
               />

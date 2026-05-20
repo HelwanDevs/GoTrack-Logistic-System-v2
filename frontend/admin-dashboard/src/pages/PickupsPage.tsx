@@ -24,7 +24,7 @@ import { ProfileType } from "@/types/enums";
 
 interface Pickup {
   id: string;
-  merchantProfileId: string;
+  MERCHANTId: string;
   merchantName: string;
   branchId: string;
   branchName: string;
@@ -37,13 +37,13 @@ interface Pickup {
 
 interface EditingPickup {
   id: string;
-  merchantProfileId: string;
+  MERCHANTId: string;
   branchId: string;
   status: PickupStatus;
 }
 
 interface CreatePickupForm {
-  merchantProfileId: string;
+  MERCHANTId: string;
   branchId: string;
 }
 export const PickupsPage = () => {
@@ -57,7 +57,7 @@ export const PickupsPage = () => {
   // ── Edit Form State ──
   const [editForm, setEditForm] = useState<EditingPickup>({
     id: "",
-    merchantProfileId: "",
+    MERCHANTId: "",
     branchId: "",
     status: PickupStatus.PENDING,
   });
@@ -75,7 +75,7 @@ export const PickupsPage = () => {
 
   // ── Create Form State ──
   const [createForm, setCreateForm] = useState<CreatePickupForm>({
-    merchantProfileId: "",
+    MERCHANTId: "",
     branchId: "",
   });
 
@@ -92,7 +92,7 @@ export const PickupsPage = () => {
     error: searchError,
   } = useSearchPickupsQuery({
     status: statusFilter || undefined,
-    merchantProfileId: merchantSearch ? Number(merchantSearch) : undefined,
+    MERCHANTId: merchantSearch ? Number(merchantSearch) : undefined,
     courierProfileId: courierFilter ? Number(courierFilter) : undefined,
     branchId: undefined,
     page: 0,
@@ -138,8 +138,8 @@ export const PickupsPage = () => {
     (isSearchActive ? searchData?.content : pickupsData?.content)?.map(
       (pickup: PickupRequestDTO) => ({
         id: String(pickup.id || ""),
-        merchantProfileId: String(pickup.merchantProfileId || ""),
-        merchantName: getMerchantName(pickup.merchantProfileId),
+        MERCHANTId: String(pickup.MERCHANTId || ""),
+        merchantName: getMerchantName(pickup.MERCHANTId),
         branchId: String(pickup.branchId || ""),
         branchName: getBranchName(pickup.branchId),
         courierProfileId: pickup.courierProfileId
@@ -201,8 +201,8 @@ export const PickupsPage = () => {
   const handleCreatePickup = async () => {
     const errors: Record<string, string> = {};
 
-    if (!createForm.merchantProfileId) {
-      errors.merchantProfileId = "التاجر مطلوب";
+    if (!createForm.MERCHANTId) {
+      errors.MERCHANTId = "التاجر مطلوب";
     }
     if (!createForm.branchId) {
       errors.branchId = "الفرع مطلوب";
@@ -214,11 +214,11 @@ export const PickupsPage = () => {
 
     try {
       await createMutation.mutateAsync({
-        merchantProfileId: Number(createForm.merchantProfileId),
+        MERCHANTId: Number(createForm.MERCHANTId),
         branchId: Number(createForm.branchId),
       } as PickupRequestDTO);
 
-      setCreateForm({ merchantProfileId: "", branchId: "" });
+      setCreateForm({ MERCHANTId: "", branchId: "" });
       setShowCreateForm(false);
     } catch (error: any) {
       console.error("Failed to create pickup:", error);
@@ -229,7 +229,7 @@ export const PickupsPage = () => {
     setEditingId(pickup.id);
     setEditForm({
       id: pickup.id,
-      merchantProfileId: pickup.merchantProfileId,
+      MERCHANTId: pickup.MERCHANTId,
       branchId: pickup.branchId,
       status: pickup.status,
     });
@@ -238,8 +238,8 @@ export const PickupsPage = () => {
   const handleSaveEdit = async () => {
     const errors: Record<string, string> = {};
 
-    if (!editForm.merchantProfileId) {
-      errors.merchantProfileId = "التاجر مطلوب";
+    if (!editForm.MERCHANTId) {
+      errors.MERCHANTId = "التاجر مطلوب";
     }
     if (!editForm.branchId) {
       errors.branchId = "الفرع مطلوب";
@@ -254,7 +254,7 @@ export const PickupsPage = () => {
         await updateMutation.mutateAsync({
           id: Number(editingId),
           data: {
-            merchantProfileId: Number(editForm.merchantProfileId),
+            MERCHANTId: Number(editForm.MERCHANTId),
             branchId: Number(editForm.branchId),
             status: editForm.status,
           } as PickupRequestDTO,
@@ -263,7 +263,7 @@ export const PickupsPage = () => {
         setEditingId(null);
         setEditForm({
           id: "",
-          merchantProfileId: "",
+          MERCHANTId: "",
           branchId: "",
           status: PickupStatus.PENDING,
         });
@@ -277,7 +277,7 @@ export const PickupsPage = () => {
     setEditingId(null);
     setEditForm({
       id: "",
-      merchantProfileId: "",
+      MERCHANTId: "",
       branchId: "",
       status: PickupStatus.PENDING,
     });
@@ -379,7 +379,7 @@ export const PickupsPage = () => {
             size="sm"
             onClick={() => {
               setShowCreateForm(!showCreateForm);
-              setCreateForm({ merchantProfileId: "", branchId: "" });
+              setCreateForm({ MERCHANTId: "", branchId: "" });
             }}
           >
             {showCreateForm ? "إلغاء" : "+ طلب بيك آب جديد"}
@@ -559,11 +559,11 @@ export const PickupsPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <Select
               label="التاجر"
-              value={createForm.merchantProfileId}
+              value={createForm.MERCHANTId}
               onChange={(e) =>
                 setCreateForm({
                   ...createForm,
-                  merchantProfileId: e.target.value,
+                  MERCHANTId: e.target.value,
                 })
               }
               options={[
@@ -602,7 +602,7 @@ export const PickupsPage = () => {
               size="md"
               onClick={() => {
                 setShowCreateForm(false);
-                setCreateForm({ merchantProfileId: "", branchId: "" });
+                setCreateForm({ MERCHANTId: "", branchId: "" });
               }}
             >
               إلغاء
@@ -687,11 +687,11 @@ export const PickupsPage = () => {
                       <div className="flex items-center gap-2">
                         {editingId === pickup.id ? (
                           <Select
-                            value={editForm.merchantProfileId}
+                            value={editForm.MERCHANTId}
                             onChange={(e) =>
                               setEditForm({
                                 ...editForm,
-                                merchantProfileId: e.target.value,
+                                MERCHANTId: e.target.value,
                               })
                             }
                             options={[
@@ -704,7 +704,7 @@ export const PickupsPage = () => {
                           />
                         ) : (
                           <span className="text-body-sm">
-                            {getMerchantName(pickup.merchantProfileId)}
+                            {getMerchantName(pickup.MERCHANTId)}
                           </span>
                         )}
                       </div>
@@ -785,7 +785,7 @@ export const PickupsPage = () => {
                               onClick={() =>
                                 handleEditClick({
                                   id: pickup.id,
-                                  merchantProfileId: pickup.merchantProfileId,
+                                  MERCHANTId: pickup.MERCHANTId,
                                   branchId: pickup.branchId,
                                   status: pickup.status as PickupStatus,
                                   branchName: pickup.branchName,
@@ -804,8 +804,8 @@ export const PickupsPage = () => {
                                   onClick={() => {
                                     setAssigningCourier({
                                       id: pickup.id,
-                                      merchantProfileId:
-                                        pickup.merchantProfileId,
+                                      MERCHANTId:
+                                        pickup.MERCHANTId,
                                       branchId: pickup.branchId,
                                       status: pickup.status as PickupStatus,
                                       branchName: pickup.branchName,
@@ -824,7 +824,7 @@ export const PickupsPage = () => {
                               onClick={() => {
                                 setSelectedPickup({
                                   id: pickup.id,
-                                  merchantProfileId: pickup.merchantProfileId,
+                                  MERCHANTId: pickup.MERCHANTId,
                                   branchId: pickup.branchId,
                                   status: pickup.status as PickupStatus,
                                   branchName: pickup.branchName,
@@ -928,7 +928,7 @@ export const PickupsPage = () => {
                   التاجر
                 </label>
                 <p className="text-body-md text-on-surface">
-                  {getMerchantName(selectedPickup.merchantProfileId)}
+                  {getMerchantName(selectedPickup.MERCHANTId)}
                 </p>
               </div>
 
