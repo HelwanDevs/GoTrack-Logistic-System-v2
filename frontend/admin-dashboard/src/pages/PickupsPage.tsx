@@ -134,6 +134,44 @@ export const PickupsPage = () => {
     dateFilter,
   );
 
+ const merchants: { id: string; name: string }[] =
+    merchantsData?.content?.map((p: ProfileResponseDTO) => ({
+      id: String(p.id),
+      name: p.fullName,
+    })) || [];
+
+  const couriers: { id: string; name: string }[] =
+    couriersData?.content?.map((p: ProfileResponseDTO) => ({
+      id: String(p.id),
+      name: p.fullName,
+    })) || [];
+
+  const branches: { id: string; name: string }[] =
+    branchesData?.content?.map((b: BranchDTO) => ({
+      id: String(b.id),
+      name: b.name,
+    })) || [];
+
+
+
+ const getMerchantName = (merchantId: string | number) => {
+    const id = String(merchantId);
+    const merchant = merchants.find((m) => m.id === id);
+    return merchant?.name || "تاجر";
+  };
+
+  const getBranchName = (branchId: string | number) => {
+    const id = String(branchId);
+    const branch = branches.find((b) => b.id === id);
+    return branch?.name || "فرع";
+  };
+
+  const getCourierName = (courierId: string | number) => {
+    const id = String(courierId);
+    const courier = couriers.find((c) => c.id === id);
+    return courier?.name;
+  };
+
   const pickups =
     (isSearchActive ? searchData?.content : pickupsData?.content)?.map(
       (pickup: PickupRequestDTO) => ({
@@ -161,41 +199,8 @@ export const PickupsPage = () => {
     ? searchData?.totalPages
     : pickupsData?.totalPages;
 
-  const merchants: { id: string; name: string }[] =
-    merchantsData?.content?.map((p: ProfileResponseDTO) => ({
-      id: String(p.id),
-      name: p.fullName,
-    })) || [];
-
-  const couriers: { id: string; name: string }[] =
-    couriersData?.content?.map((p: ProfileResponseDTO) => ({
-      id: String(p.id),
-      name: p.fullName,
-    })) || [];
-
-  const branches: { id: string; name: string }[] =
-    branchesData?.content?.map((b: BranchDTO) => ({
-      id: String(b.id),
-      name: b.name,
-    })) || [];
-
-  const getMerchantName = (merchantId: string | number) => {
-    const id = String(merchantId);
-    const merchant = merchants.find((m) => m.id === id);
-    return merchant?.name || "تاجر";
-  };
-
-  const getBranchName = (branchId: string | number) => {
-    const id = String(branchId);
-    const branch = branches.find((b) => b.id === id);
-    return branch?.name || "فرع";
-  };
-
-  const getCourierName = (courierId: string | number) => {
-    const id = String(courierId);
-    const courier = couriers.find((c) => c.id === id);
-    return courier?.name;
-  };
+ 
+ 
 
   // ── Handlers ──
   const handleCreatePickup = async () => {

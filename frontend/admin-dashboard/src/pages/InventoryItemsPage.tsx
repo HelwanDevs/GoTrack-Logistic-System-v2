@@ -109,25 +109,6 @@ export const InventoryItemsPage = () => {
   // ── Derived Data ──
   const isSearchActive = Boolean(branchFilter || skuSearch || merchantFilter);
 
-  const inventoryItems =
-    (isSearchActive
-      ? searchData?.data?.content
-      : itemsData?.data?.content
-    )?.map((item: any) => ({
-      ...item,
-      merchantId: item.merchantId || item.MerchantId,
-      branchName: getBranchName(item.branchId),
-      merchantName: getMerchantName(item.merchantId || item.MerchantId),
-      productName: getProductName(item.productId),
-    })) || [];
-
-  const totalCount = isSearchActive
-    ? searchData?.data?.totalElements
-    : itemsData?.data?.totalElements;
-  const totalPages = isSearchActive
-    ? searchData?.data?.totalPages
-    : itemsData?.data?.totalPages;
-
   const getBranchName = (branchId: number) => {
     const branch = branches.find((b) => b.id === branchId);
     return branch?.name || "فرع";
@@ -141,6 +122,22 @@ export const InventoryItemsPage = () => {
     return `منتج ${productId}`;
   };
 
+    const inventoryItems =
+    (
+       itemsData?.data?.content
+      
+    )?.map((item: any) => ({
+      ...item,
+      merchantId: item.merchantId || item.MerchantId,
+      branchName: getBranchName(item.branchId),
+      merchantName: getMerchantName(item.merchantId || item.MerchantId),
+      productName: item?.productName ?? getProductName(item.productId),
+    })) || [];
+  const totalCount = 
+     itemsData?.data?.totalElements
+  const totalPages = isSearchActive
+    ? searchData?.data?.totalPages
+    : itemsData?.data?.totalPages;
   // ── Handlers ──
   const handleReceiveItems = async () => {
     const errors: Record<string, string> = {};
@@ -523,8 +520,7 @@ export const InventoryItemsPage = () => {
         )}
 
         {/* Empty State */}
-        {!isSearchingOrLoading &&
-          inventoryItems.length === 0 &&
+        {inventoryItems.length === 0 &&
           !itemsError &&
           !searchError && (
             <div className="text-center py-12">
@@ -542,7 +538,7 @@ export const InventoryItemsPage = () => {
           )}
 
         {/* Inventory Items Table */}
-        {!isSearchingOrLoading && inventoryItems.length > 0 && (
+        {inventoryItems.length > 0 && (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>

@@ -1,67 +1,12 @@
 {
   "info": {
-    "_postman_id": "se2-api-collection",
+    "_postman_id": "56934398-5c2c-4ec2-8828-f4b0fa0b6d3e",
     "name": "GoTrack SE-2 API Collection",
+    "description": "Comprehensive API test collection for the GoTrack Logistics platform covering auth-service, user-branch-service, and inventory-service. Includes auth flow, CRUD operations, service-to-service integration via Feign, error cases, and full data-flow test scenarios.\n\n## Setup Instructions\n1. Set environment variables before running:\n   - `baseUrl_auth` → http://localhost:8080\n   - `baseUrl_branch` → http://localhost:8080\n   - `baseUrl_inventory` → http://localhost:8080\n2. Run the 'Auth Flow' folder first to capture accessToken and refreshToken.\n3. All subsequent requests use {{accessToken}} in the Authorization header.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Comprehensive API test collection for the GoTrack Logistics platform covering auth-service, user-branch-service, and inventory-service. Includes auth flow, CRUD operations, service-to-service integration via Feign, error cases, and full data-flow test scenarios.\n\n## Setup Instructions\n1. Set environment variables before running:\n   - `baseUrl_auth` → http://localhost:8080\n   - `baseUrl_branch` → http://localhost:8080\n   - `baseUrl_inventory` → http://localhost:8080\n2. Run the 'Auth Flow' folder first to capture accessToken and refreshToken.\n3. All subsequent requests use {{accessToken}} in the Authorization header."
+    "_exporter_id": "54046276",
+    "_collection_link": "https://go.postman.co/collection/54046276-56934398-5c2c-4ec2-8828-f4b0fa0b6d3e?source=collection_link"
   },
-  "variable": [
-    {
-      "key": "baseUrl_auth",
-      "value": "http://localhost:8080",
-      "type": "string"
-    },
-    {
-      "key": "baseUrl_branch",
-      "value": "http://localhost:8080",
-      "type": "string"
-    },
-    {
-      "key": "baseUrl_inventory",
-      "value": "http://localhost:8080",
-      "type": "string"
-    },
-    {
-      "key": "accessToken",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "refreshToken",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "accountId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "branchId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "profileId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "productId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "merchantId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "pickupRequestId",
-      "value": "",
-      "type": "string"
-    }
-  ],
   "item": [
     {
       "name": "01. Auth Service — Authentication",
@@ -70,165 +15,287 @@
           "name": "Happy Path — Login",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@gotrack.com\",\n  \"password\": \"password123\"\n}"
+              "raw": "{\n  \"email\": \"admin_admin@admin.com\",\n  \"password\": \"1234567\"\n}"
             },
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/login",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "login"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Response has token', () => {\n  const json = pm.response.json();\n  pm.expect(json.token).to.exist;\n  pm.collectionVariables.set('accessToken', json.token);\n});\npm.test('Response has refreshToken', () => {\n  const json = pm.response.json();\n  pm.expect(json.refreshToken).to.exist;\n  pm.collectionVariables.set('refreshToken', json.refreshToken);\n});\npm.test('Response has accountId', () => {\n  const json = pm.response.json();\n  pm.expect(json.accountId).to.exist;\n  pm.collectionVariables.set('accountId', json.accountId);\n});\npm.test('Response has role', () => {\n  const json = pm.response.json();\n  pm.expect(json.role).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Invalid Credentials",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"nonexistent@gotrack.com\",\n  \"password\": \"wrongpassword\"\n}"
             },
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/login",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "login"]
-            },
-            "test": "pm.test('Status is 400', () => pm.response.to.have.status(400));\npm.test('Error response has message', () => {\n  const json = pm.response.json();\n  pm.expect(json.message).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Missing Email",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"password\": \"password123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/login",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "login"]
-            },
-            "test": "pm.test('Status is 400 (validation)', () => pm.response.to.have.status(400));"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Refresh Token",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
             },
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/refresh-token",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "refresh-token"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('New access token returned', () => {\n  const json = pm.response.json();\n  pm.expect(json.accessToken).to.exist;\n  pm.collectionVariables.set('accessToken', json.accessToken);\n});\npm.test('New refresh token returned', () => {\n  const json = pm.response.json();\n  pm.expect(json.refreshToken).to.exist;\n  pm.collectionVariables.set('refreshToken', json.refreshToken);\n});"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Invalid Refresh Token",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"refreshToken\": \"invalid_expired_token\"\n}"
             },
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/refresh-token",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "refresh-token"]
-            },
-            "test": "pm.test('Status is 401', () => pm.response.to.have.status(401));"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Logout",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
             },
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/logout",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "logout"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Logout message returned', () => {\n  const json = pm.response.json();\n  pm.expect(json.message).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Get Account By ID",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/accounts/{{accountId}}",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "accounts", "{{accountId}}"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Account has email and role', () => {\n  const json = pm.response.json();\n  pm.expect(json.email).to.exist;\n  pm.expect(json.role).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "accounts",
+                "{{accountId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Account Not Found",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/accounts/000000000000000000000000",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "accounts", "000000000000000000000000"]
-            },
-            "test": "pm.test('Status is 404', () => pm.response.to.have.status(404));"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "accounts",
+                "000000000000000000000000"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — List Accounts",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/accounts?role=ADMIN&page=0&size=10&includeDeleted=false",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "accounts"],
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "accounts"
+              ],
               "query": [
-                { "key": "role", "value": "ADMIN" },
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "10" },
-                { "key": "includeDeleted", "value": "false" }
+                {
+                  "key": "role",
+                  "value": "ADMIN"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "includeDeleted",
+                  "value": "false"
+                }
               ]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Response has paginated accounts', () => {\n  const json = pm.response.json();\n  pm.expect(json.accounts).to.be.an('array');\n  pm.expect(json.totalCount).to.be.a('number');\n  pm.expect(json.totalPages).to.be.a('number');\n});"
-          }
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Create Account",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -236,19 +303,31 @@
             },
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/accounts",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "accounts"]
-            },
-            "test": "pm.test('Status is 201', () => pm.response.to.have.status(201));\npm.test('Account created with ID', () => {\n  const json = pm.response.json();\n  pm.expect(json.accountId).to.exist;\n  pm.collectionVariables.set('accountId', json.accountId);\n});"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "accounts"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Duplicate Email on Create",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -256,19 +335,31 @@
             },
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/accounts",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "accounts"]
-            },
-            "test": "pm.test('Status is 409 Conflict', () => pm.response.to.have.status(409));"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "accounts"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Update Account",
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -276,43 +367,77 @@
             },
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/accounts/{{accountId}}",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "accounts", "{{accountId}}"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Update response has message', () => {\n  const json = pm.response.json();\n  pm.expect(json.message).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "accounts",
+                "{{accountId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Soft Delete Account",
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/accounts/{{accountId}}",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "accounts", "{{accountId}}"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "accounts",
+                "{{accountId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Check Super Admin",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/accounts/super-admin/{{accountId}}",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "accounts", "super-admin", "{{accountId}}"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Returns boolean', () => {\n  const json = pm.response.json();\n  pm.expect(json).to.be.a('boolean');\n});"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "accounts",
+                "super-admin",
+                "{{accountId}}"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -324,8 +449,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -333,76 +464,137 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Branch returned with ID', () => {\n  const json = pm.response.json();\n  pm.expect(json.id).to.exist;\n  pm.collectionVariables.set('branchId', json.id);\n});"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Get Branch By ID",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches/{{branchId}}",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches", "{{branchId}}"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Branch has name, location, phone', () => {\n  const json = pm.response.json();\n  pm.expect(json.name).to.exist;\n  pm.expect(json.location).to.exist;\n  pm.expect(json.phone).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches",
+                "{{branchId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — List Branches (Paginated)",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches?page=0&size=5",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches"],
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "5" }
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
               ]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Response is paginated', () => {\n  const json = pm.response.json();\n  pm.expect(json.content).to.be.an('array');\n  pm.expect(json.totalElements).to.be.a('number');\n  pm.expect(json.totalPages).to.be.a('number');\n});"
-          }
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Search Branches",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches/search?name=Cairo&page=0&size=5",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches", "search"],
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches",
+                "search"
+              ],
               "query": [
-                { "key": "name", "value": "Cairo" },
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "5" }
+                {
+                  "key": "name",
+                  "value": "Cairo"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
               ]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));"
-          }
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Full Update Branch",
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -410,51 +602,87 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches/{{branchId}}",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches", "{{branchId}}"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Branch updated with new values', () => {\n  const json = pm.response.json();\n  pm.expect(json.name).to.equal('Cairo Main Branch Updated');\n});"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches",
+                "{{branchId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Soft Delete Branch",
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches/{{branchId}}",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches", "{{branchId}}"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Deactivation message returned', () => {\n  const json = pm.response.json();\n  pm.expect(json.message).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches",
+                "{{branchId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Branch ID Not Positive",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches/-1",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches", "-1"]
-            },
-            "test": "pm.test('Status is 400 (bad request)', () => pm.response.to.have.status(400));"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches",
+                "-1"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Invalid Phone Format",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -462,19 +690,30 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches"]
-            },
-            "test": "pm.test('Status is 400 (validation error)', () => pm.response.to.have.status(400));"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Missing Required Fields",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -482,35 +721,58 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches"]
-            },
-            "test": "pm.test('Status is 400 (validation)', () => pm.response.to.have.status(400));"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Branch Not Found",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches/999999",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches", "999999"]
-            },
-            "test": "pm.test('Status is 404', () => pm.response.to.have.status(404));"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches",
+                "999999"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Edge — Create Branch with Empty Name",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -518,11 +780,16 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches"]
-            },
-            "test": "pm.test('Status is 400', () => pm.response.to.have.status(400));"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -534,8 +801,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -543,35 +816,60 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles"]
-            },
-            "test": "pm.test('Status is 201', () => pm.response.to.have.status(201));\npm.test('Profile created successfully', () => {\n  const json = pm.response.json();\n  pm.expect(json.message).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Get Profile By ID",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles/1",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles", "1"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Profile has fullName and type', () => {\n  const json = pm.response.json();\n  pm.expect(json.fullName).to.exist;\n  pm.expect(json.type).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles",
+                "1"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Update Profile",
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -579,78 +877,151 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles/1",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles", "1"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles",
+                "1"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — List All Profiles",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles?page=0&size=10&sortBy=fullName",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles"],
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "10" },
-                { "key": "sortBy", "value": "fullName" }
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "fullName"
+                }
               ]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));"
-          }
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Search Profiles",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles/search?name=Ahmed&type=EMPLOYEE&page=0&size=10",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles", "search"],
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles",
+                "search"
+              ],
               "query": [
-                { "key": "name", "value": "Ahmed" },
-                { "key": "type", "value": "EMPLOYEE" },
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "10" }
+                {
+                  "key": "name",
+                  "value": "Ahmed"
+                },
+                {
+                  "key": "type",
+                  "value": "EMPLOYEE"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
               ]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));"
-          }
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Get Profile By Account ID",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles/account/{{accountId}}",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles", "account", "{{accountId}}"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Profile found by account ID', () => {\n  const json = pm.response.json();\n  pm.expect(json.accountId).to.eql('{{accountId}}');\n});"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles",
+                "account",
+                "{{accountId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Profile ID Not Positive",
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -658,19 +1029,32 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles/-1",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles", "-1"]
-            },
-            "test": "pm.test('Status is 400', () => pm.response.to.have.status(400));"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles",
+                "-1"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Invalid Phone Number Format",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -678,19 +1062,31 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles"]
-            },
-            "test": "pm.test('Status is 400', () => pm.response.to.have.status(400));"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Duplicate Phone Number",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -698,19 +1094,31 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles"]
-            },
-            "test": "pm.test('Status is 409 Conflict', () => pm.response.to.have.status(409));"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Edge — Courier Profile Without Account ID",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -718,11 +1126,17 @@
             },
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles"]
-            },
-            "test": "pm.test('Status is 201 (courier has no account)', () => pm.response.to.have.status(201));"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -734,8 +1148,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -743,19 +1163,31 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/products",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "products"]
-            },
-            "test": "pm.test('Status is 201', () => pm.response.to.have.status(201));\npm.test('Product created', () => {\n  const json = pm.response.json();\n  pm.expect(json.data.id).to.exist;\n  pm.collectionVariables.set('productId', json.data.id);\n});"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "products"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Update Product",
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -763,59 +1195,111 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/products/{{productId}}",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "products", "{{productId}}"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "products",
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Get Products By Merchant ID",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/products/merchent/1?page=0&size=10",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "products", "merchent", "1"],
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "products",
+                "merchent",
+                "1"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "10" }
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
               ]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Products returned for merchant', () => {\n  const json = pm.response.json();\n  pm.expect(json.data.content).to.be.an('array');\n});"
-          }
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Get My Products (Merchant)",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/products/myProducts?page=0&size=10",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "products", "myProducts"],
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "products",
+                "myProducts"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "10" }
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
               ]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));"
-          }
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Duplicate Base SKU",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -823,19 +1307,31 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/products",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "products"]
-            },
-            "test": "pm.test('Status is 409 Conflict', () => pm.response.to.have.status(409));"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "products"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Missing Product Name",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -843,19 +1339,31 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/products",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "products"]
-            },
-            "test": "pm.test('Status is 400', () => pm.response.to.have.status(400));"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "products"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Product Not Found on Update",
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -863,11 +1371,18 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/products/999999",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "products", "999999"]
-            },
-            "test": "pm.test('Status is 404', () => pm.response.to.have.status(404));"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "products",
+                "999999"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -879,8 +1394,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -888,60 +1409,113 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/items/receive",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "items", "receive"]
-            },
-            "test": "pm.test('Status is 201', () => pm.response.to.have.status(201));\npm.test('Items received successfully', () => {\n  const json = pm.response.json();\n  pm.expect(json.message).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "items",
+                "receive"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — List All Inventory Items",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/items?page=0&size=10",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "items"],
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "items"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "10" }
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
               ]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\npm.test('Items returned with pagination', () => {\n  const json = pm.response.json();\n  pm.expect(json.data.content).to.be.an('array');\n});"
-          }
+            }
+          },
+          "response": []
         },
         {
           "name": "Happy Path — Search Inventory Items",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/items/search?page=0&size=10&uniqueSku=WM-001-SKU-001",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "items", "search"],
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "items",
+                "search"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "10" },
-                { "key": "uniqueSku", "value": "WM-001-SKU-001" }
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "uniqueSku",
+                  "value": "WM-001-SKU-001"
+                }
               ]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));"
-          }
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Invalid Branch ID (non-existent)",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -949,19 +1523,32 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/items/receive",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "items", "receive"]
-            },
-            "test": "pm.test('Status is 404', () => pm.response.to.have.status(404));"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "items",
+                "receive"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Duplicate Unique SKU",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -969,19 +1556,32 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/items/receive",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "items", "receive"]
-            },
-            "test": "pm.test('Status is 409 Conflict', () => pm.response.to.have.status(409));"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "items",
+                "receive"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Error — Empty SKU List",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -989,19 +1589,32 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/items/receive",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "items", "receive"]
-            },
-            "test": "pm.test('Status is 400', () => pm.response.to.have.status(400));"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "items",
+                "receive"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Edge — Receive With Non-Numeric Branch ID",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1009,11 +1622,18 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/items/receive",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "items", "receive"]
-            },
-            "test": "pm.test('Status is 400 or 404', () => {\n  const status = pm.response.code;\n  pm.expect(status).to.be.oneOf([400, 404]);\n});"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "items",
+                "receive"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -1022,19 +1642,6 @@
       "item": [
         {
           "name": "Integration — AuthClient: user-branch calls auth-service",
-          "request": {
-            "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "url": {
-              "raw": "{{baseUrl_branch}}/api/auth/accounts/{{accountId}}",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "auth", "accounts", "{{accountId}}"]
-            },
-            "test": "pm.test('Auth client returns account', () => {\n  const json = pm.response.json();\n  pm.expect(json).to.be.an('object');\n});"
-          },
           "event": [
             {
               "listen": "test",
@@ -1049,55 +1656,119 @@
                 ]
               }
             }
-          ]
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl_branch}}/api/auth/accounts/{{accountId}}",
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "accounts",
+                "{{accountId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Integration — UserClient: inventory calls user-branch for profile lookup",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/users/profiles/account/{{accountId}}",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "users", "profiles", "account", "{{accountId}}"]
-            },
-            "test": "pm.test('User client returns profile', () => {\n  const json = pm.response.json();\n  pm.expect(json.accountId).to.eql('{{accountId}}');\n});"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profiles",
+                "account",
+                "{{accountId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Integration — BranchClient: inventory calls user-branch for branch validation",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/branches/{{branchId}}",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "branches", "{{branchId}}"]
-            },
-            "test": "pm.test('Branch client returns branch data', () => {\n  const json = pm.response.json();\n  pm.expect(json.id).to.eql(pm.collectionVariables.get('branchId'));\n});"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "branches",
+                "{{branchId}}"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Integration — PickupClient: inventory calls core-logistic-finance",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_branch}}/api/pickups/1",
-              "host": ["{{baseUrl_branch}}"],
-              "path": ["api", "pickups", "1"]
-            },
-            "test": "pm.test('PickupClient resolves or returns null', () => {\n  const json = pm.response.json();\n  pm.expect(json).to.be.an('object');\n});"
-          }
+              "host": [
+                "{{baseUrl_branch}}"
+              ],
+              "path": [
+                "api",
+                "pickups",
+                "1"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -1106,174 +1777,39 @@
       "item": [
         {
           "name": "Scenario 1 — Full App/Data Flow: Register → Login → Create Profile → Branch → Product → Inventory",
-          "request": {
-            "postman_onFail": "describeFailure",
-            "script": {
-              "type": "text/javascript",
-              "exec": [
-                "let log = (msg) => console.log('[E2E]', msg);",
-                "let step = pm.variables.get('e2eStep') || 'create_account';",
-                "",
-                "const authUrl = pm.variables.get('baseUrl_auth');",
-                "",
-                "if (step === 'create_account') {",
-                "  pm.sendRequest({",
-                "    url: authUrl + '/api/auth/accounts',",
-                "    header: {",
-                "      'Authorization': 'Bearer ' + pm.variables.get('accessToken'),",
-                "      'Content-Type': 'application/json'",
-                "    },",
-                "    method: 'POST',",
-                "    body: {",
-                "      mode: 'raw',",
-                "      raw: JSON.stringify({",
-                "        email: 'e2e_' + Date.now() + '@gotrack.com',",
-                "        password: 'password123',",
-                "        role: 'MERCHANT'",
-                "      })",
-                "    }",
-                "  }, function (err, res) {",
-                "    if (err) { log('FAIL: ' + err); return; }",
-                "    const json = res.json();",
-                "    pm.variables.set('accountId', json.accountId);",
-                "    pm.variables.set('e2eStep', 'login');",
-                "    console.log('[E2E] Account created: ' + json.accountId);",
-                "",
-                "    pm.sendRequest({",
-                "      url: authUrl + '/api/auth/login',",
-                "      method: 'POST',",
-                "      header: { 'Content-Type': 'application/json' },",
-                "      body: {",
-                "        mode: 'raw',",
-                "        raw: JSON.stringify({ email: 'e2e_' + Date.now() + '@gotrack.com', password: 'password123' })",
-                "      }",
-                "    }, function (err2, res2) {",
-                "      if (err2) { log('FAIL login: ' + err2); return; }",
-                "      const j2 = res2.json();",
-                "      pm.variables.set('accessToken', j2.token);",
-                "      pm.variables.set('refreshToken', j2.refreshToken);",
-                "      pm.variables.set('e2eStep', 'create_branch');",
-                "      console.log('[E2E] Logged in, step: create_branch');",
-                "",
-                "      // Create branch",
-                "      pm.sendRequest({",
-                "        url: pm.variables.get('baseUrl_branch') + '/api/branches',",
-                "        method: 'POST',",
-                "        header: {",
-                "          'Authorization': 'Bearer ' + j2.token,",
-                "          'Content-Type': 'application/json'",
-                "        },",
-                "        body: {",
-                "          mode: 'raw',",
-                "          raw: JSON.stringify({",
-                "            name: 'E2E Branch ' + Date.now(),",
-                "            location: 'Cairo',",
-                "            phone: '010' + Math.floor(Math.random()*90000000 + 10000000).toString().substring(0,8)",
-                "          })",
-                "        }",
-                "      }, function (err3, res3) {",
-                "        if (err3) { log('FAIL branch: ' + err3); return; }",
-                "        const j3 = res3.json();",
-                "        pm.variables.set('branchId', j3.id);",
-                "        pm.variables.set('e2eStep', 'create_profile');",
-                "        console.log('[E2E] Branch created: ' + j3.id);",
-                "",
-                "        // Create profile",
-                "        pm.sendRequest({",
-                "          url: pm.variables.get('baseUrl_branch') + '/api/users/profiles',",
-                "          method: 'POST',",
-                "          header: {",
-                "            'Authorization': 'Bearer ' + j2.token,",
-                "            'Content-Type': 'application/json'",
-                "          },",
-                "          body: {",
-                "            mode: 'raw',",
-                "            raw: JSON.stringify({",
-                "              fullName: 'E2E Merchant',",
-                "              phoneNumber: '011' + Math.floor(Math.random()*90000000 + 10000000).toString().substring(0,8),",
-                "              type: 'EMPLOYEE',",
-                "              accountId: pm.variables.get('accountId'),",
-                "              branchId: j3.id",
-                "            })",
-                "          }",
-                "        }, function (err4, res4) {",
-                "          if (err4) { log('FAIL profile: ' + err4); return; }",
-                "          const j4 = res4.json();",
-                "          console.log('[E2E] Profile created: ' + (j4.data || j4));",
-                "",
-                "          pm.variables.set('e2eStep', 'create_product');",
-                "",
-                "          // Create product",
-                "          pm.sendRequest({",
-                "            url: pm.variables.get('baseUrl_inventory') + '/api/inventory/products',",
-                "            method: 'POST',",
-                "            header: {",
-                "              'Authorization': 'Bearer ' + j2.token,",
-                "              'Content-Type': 'application/json'",
-                "            },",
-                "            body: {",
-                "              mode: 'raw',",
-                "              raw: JSON.stringify({",
-                "                name: 'E2E Product ' + Date.now(),",
-                "                merchantId: 1,",
-                "                baseSku: 'E2E-' + Date.now()",
-                "              })",
-                "            }",
-                "          }, function (err5, res5) {",
-                "            if (err5) { log('FAIL product: ' + err5); return; }",
-                "            const j5 = res5.json();",
-                "            pm.variables.set('productId', j5.data.id);",
-                "            console.log('[E2E] Product created: ' + j5.data.id);",
-                "",
-                "            pm.variables.set('e2eStep', 'receive_inventory');",
-                "",
-                "            // Receive inventory",
-                "            pm.sendRequest({",
-                "              url: pm.variables.get('baseUrl_inventory') + '/api/inventory/items/receive',",
-                "              method: 'POST',",
-                "              header: {",
-                "                'Authorization': 'Bearer ' + j2.token,",
-                "                'Content-Type': 'application/json'",
-                "              },",
-                "              body: {",
-                "                mode: 'raw',",
-                "                raw: JSON.stringify({",
-                "                  productId: j5.data.id,",
-                "                  branchId: j3.id,",
-                "                  pickupRequestId: 1,",
-                "                  uniqueSkus: ['E2E-SKU-A', 'E2E-SKU-B', 'E2E-SKU-C']",
-                "                })",
-                "              }",
-                "            }, function (err6, res6) {",
-                "              if (err6) { log('FAIL inventory: ' + err6); return; }",
-                "              const j6 = res6.json();",
-                "              console.log('[E2E] ✅ Full flow complete: ' + j6.message);",
-                "            });",
-                "          });",
-                "        });",
-                "      });",
-                "  });",
-                "}"
-              ]
-            }
-          },
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('E2E Step Completed', () => {\n  pm.expect(true).to.be.true;\n});"]
+                "exec": [
+                  "pm.test('E2E Step Completed', () => {\n  pm.expect(true).to.be.true;\n});"
+                ]
               }
             }
-          ]
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
         },
         {
           "name": "Scenario 2 — Error Cascade: Invalid Merchant Creates Product",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1281,19 +1817,31 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/products",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "products"]
-            },
-            "test": "pm.test('Status is 404 — merchant not found', () => {\n  const status = pm.response.status;\n  pm.expect(status).to.be.oneOf([404, 409, 500]);\n});"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "products"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Scenario 3 — Receive Inventory Before Product Exists",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1301,11 +1849,18 @@
             },
             "url": {
               "raw": "{{baseUrl_inventory}}/api/inventory/items/receive",
-              "host": ["{{baseUrl_inventory}}"],
-              "path": ["api", "inventory", "items", "receive"]
-            },
-            "test": "pm.test('Status is 404 — product not found', () => {\n  const status = pm.response.status;\n  pm.expect(status).to.be.oneOf([404, 400]);\n});"
-          }
+              "host": [
+                "{{baseUrl_inventory}}"
+              ],
+              "path": [
+                "api",
+                "inventory",
+                "items",
+                "receive"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -1316,36 +1871,411 @@
           "name": "Re-Authenticate — Get Fresh Tokens",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"admin@gotrack.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/login",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "login"]
-            },
-            "test": "pm.test('Status is 200', () => pm.response.to.have.status(200));\nprompt = pm.response.json();\npm.collectionVariables.set('accessToken', prompt.token);\npm.collectionVariables.set('refreshToken', prompt.refreshToken);\npm.collectionVariables.set('accountId', prompt.accountId);"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Verify Token Works — Get Account",
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "url": {
               "raw": "{{baseUrl_auth}}/api/auth/accounts/{{accountId}}",
-              "host": ["{{baseUrl_auth}}"],
-              "path": ["api", "auth", "accounts", "{{accountId}}"]
-            },
-            "test": "pm.test('Token is valid — account returned', () => {\n  pm.response.to.have.status(200);\n  const json = pm.response.json();\n  pm.expect(json.id).to.exist;\n});"
-          }
+              "host": [
+                "{{baseUrl_auth}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "accounts",
+                "{{accountId}}"
+              ]
+            }
+          },
+          "response": []
         }
       ]
+    },
+    {
+      "name": "Shipment APIs",
+      "item": [
+        {
+          "name": "Create Shipment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"courierId\": 2,\n  \"flyerNumber\": 123456,\n  \"note\": \"Fragile\",\n  \"status\": \"PENDING\",\n  \"totalPrice\": 1000,\n  \"shipmentFee\": 100,\n  \"deliveryDate\": \"2026-05-15T18:00:00\",\n  \"pickupRequest\": {\n    \"id\": 1\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/shipments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "shipments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Shipment Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"DELIVERED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/shipments/1/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "shipments",
+                "1",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Shipments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/shipments/search?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "shipments",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pickup APIs",
+      "item": [
+        {
+          "name": "Create Pickup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"courierId\": 2,\n  \"pickupAddress\": \"Nasr City\",\n  \"notes\": \"Handle carefully\",\n  \"pickupTime\": \"2026-05-10T12:00:00\",\n  \"receiverName\": \"Ahmed Ali\",\n  \"receiverContact\": \"01012345678\",\n  \"receiverAddress\": \"Maadi\",\n  \"status\": \"PENDING\",\n  \"cost\": 250.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pickups",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pickups"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Pickup",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbl9hZG1pbkBhZG1pbi5jb20iLCJhY2NvdW50SWQiOiI2OWVhNmRlNTQ3Zjg1MThmYjZiMDliN2IiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzgzMDUzNDAsImV4cCI6MTc3ODMwODk0MH0.lIN-WUJ03UjKNFDLIMsjR1kU7PwBof7EscQ532i6pDlEe1AzjqGGiyDrKb4taS8MsZwE9U3SE6FCfbV4iacKKNETeFYqU0nOfPksqHQ0bnpQIGd7opWTznWi_bupAXAK5mcrOHQAd9N6u_UVWQJ2VImi2Pvc9gdGmSH9dI52My852mSyA6Aj7syKNkwhND4mZY5HVUaFM92EkURNtdAIy37Uiph_PVCId5L_KVqWjkPg2Rt4XM-LGiKq0r-XjNVi7EOJMzo8Owi7ypXhoGItmR9xbbU-O9CgjpufMCzycVwWRpSrNrdM5sdM4tQOUjv-kG3VXXvR46iKi1KpZSn42Q",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Status\": \"Cancelled\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:9091/api/pickups/12",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9091",
+              "path": [
+                "api",
+                "pickups",
+                "12"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Courier",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:9091/api/pickups/1/assign?courierId=5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9091",
+              "path": [
+                "api",
+                "pickups",
+                "1",
+                "assign"
+              ],
+              "query": [
+                {
+                  "key": "courierId",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Pickups",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/pickups/search?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pickups",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ML Service",
+      "item": [
+        {
+          "name": "Ping Request",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbl9hZG1pbkBhZG1pbi5jb20iLCJhY2NvdW50SWQiOiI2OWVhNmRlNTQ3Zjg1MThmYjZiMDliN2IiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzkzMTg4NTMsImV4cCI6MTc3OTMyMjQ1M30.L0bkchR5UqJDqBIA7i7H5U5P2IGR4A_OSp2eFfd5TodgJgGHwPRxKKMvxYF7AN8ugM4zfHHdLEu-Qi0--EjcI4kIGq3iPGBg6VO8vWfC27cj_I51ezqYb-nPI780foPgJlsv4ID__8-pnuH922-M_oX5oZEy3J_XKmXRtr9HRSUMdywuFl72Q1vi3kR1PvgNeiQU2PnyE-zdhGJjFnJrpmW8rH0vsXyVfNBsoC6ETXpmcUg5ZJNMMJgMe4jYFxvRoZjUf38gJytanAjjGFXVY0u7JzDGY39sJCgLL49kqxH5VDEIl0DEMuuqUr8DEdGTMdXap7LgxeAOB7jZuQG29Q",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"version\": \"2.0\",\r\n  \"routeKey\": \"GET /ping\",\r\n  \"rawPath\": \"/ping\",\r\n  \"rawQueryString\": \"\",\r\n  \"headers\": {},\r\n  \"requestContext\": {\r\n    \"http\": {\r\n      \"method\": \"GET\",\r\n      \"path\": \"/ping\",\r\n      \"sourceIp\": \"127.0.0.1\",\r\n      \"userAgent\": \"PostmanRuntime\"\r\n    }\r\n  },\r\n  \"body\": \"\",\r\n  \"isBase64Encoded\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/ml",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ml"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Predict Request",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbl9hZG1pbkBhZG1pbi5jb20iLCJhY2NvdW50SWQiOiI2OWVhNmRlNTQ3Zjg1MThmYjZiMDliN2IiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzkzMTg4NTMsImV4cCI6MTc3OTMyMjQ1M30.L0bkchR5UqJDqBIA7i7H5U5P2IGR4A_OSp2eFfd5TodgJgGHwPRxKKMvxYF7AN8ugM4zfHHdLEu-Qi0--EjcI4kIGq3iPGBg6VO8vWfC27cj_I51ezqYb-nPI780foPgJlsv4ID__8-pnuH922-M_oX5oZEy3J_XKmXRtr9HRSUMdywuFl72Q1vi3kR1PvgNeiQU2PnyE-zdhGJjFnJrpmW8rH0vsXyVfNBsoC6ETXpmcUg5ZJNMMJgMe4jYFxvRoZjUf38gJytanAjjGFXVY0u7JzDGY39sJCgLL49kqxH5VDEIl0DEMuuqUr8DEdGTMdXap7LgxeAOB7jZuQG29Q",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"version\": \"2.0\",\r\n  \"routeKey\": \"POST /predict\",\r\n  \"rawPath\": \"/predict\",\r\n  \"rawQueryString\": \"\",\r\n  \"headers\": {\r\n    \"content-type\": \"application/json\"\r\n  },\r\n  \"requestContext\": {\r\n    \"http\": {\r\n      \"method\": \"POST\",\r\n      \"path\": \"/predict\",\r\n      \"sourceIp\": \"127.0.0.1\",\r\n      \"userAgent\": \"PostmanRuntime\"\r\n    }\r\n  },\r\n  \"body\": \"{\\\"text\\\":\\\"شارع التحرير عمارة ٥ الدور الثالث شقة ٩ المهندسين الجيزة\\\"}\",\r\n  \"isBase64Encoded\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/ml",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ml"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl_auth",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "baseUrl_branch",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "baseUrl_inventory",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    },
+    {
+      "key": "accountId",
+      "value": ""
+    },
+    {
+      "key": "branchId",
+      "value": ""
+    },
+    {
+      "key": "profileId",
+      "value": ""
+    },
+    {
+      "key": "productId",
+      "value": ""
+    },
+    {
+      "key": "merchantId",
+      "value": ""
+    },
+    {
+      "key": "pickupRequestId",
+      "value": ""
     }
   ]
 }
