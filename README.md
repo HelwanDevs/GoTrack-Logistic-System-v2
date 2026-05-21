@@ -14,12 +14,8 @@ GoTrack is a **logistics and supply chain management platform** built as a Sprin
 
 
 ### You can find The NLP PROJECT HERE 👇
-## [Project GITHUB LINK](https://github.com/SalmaEzz10/CloudNLPUpdated)
-## [MODEL LINK](https://drive.usercontent.google.com/download?id=1QwH7bmoV00iorTlry9lnKu6XTSYOcuiR&export=download&authuser=0&confirm=t&uuid=d61ca77b-c153-4653-ac0d-f80a7a6cfcc4&at=ALBwUgngWOUdvcAFxtPr8QpZk5fi:1778936505643)
+## [Project GITHUB LINK](https://github.com/BassantHady/storage_prediction)
 
-> put the model in `arabertNER_Model` folder 
-
-## [NOTEBOOK LINK](https://colab.research.google.com/drive/1Q3KnafOA-WfzxKnqhKgbt462NxT8LVyS?usp=sharing)
 
 ## How to Run
 
